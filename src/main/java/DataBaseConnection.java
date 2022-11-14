@@ -1,34 +1,30 @@
 import java.sql.*;
 
-public class DataBaseConnection {
-    private static Connection con = null;
+public final class DataBaseConnection {
+    private static DataBaseConnection instance;
+    private Connection connection;
+    private final String url = "jdbc:mysql://localhost:3306/greenhouse";
+    private final String username = "root";
+    private final String password = "";
 
-    static {
-        //String url = "jdbc:mysql://localhost:3306/bank";
-        String url = "jdbc:mariadb://localhost:3306/bank";
-        String user = "root";
-        String pass = "";
+
+    private DataBaseConnection() throws SQLException {
         try {
-            //Class.forName("com.mysql.jdbc.Driver");
-            Class.forName("org.mariadb.jdbc.Driver");
-            con = DriverManager.getConnection(url, user, pass);
-        } catch (ClassNotFoundException | SQLException e) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            this.connection = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() {
-        return con;
+    public static DataBaseConnection getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new DataBaseConnection();
+        }
+        return instance;
     }
 
-    public static void main(String[] args) throws SQLException {
-        DataBaseConnection base = new DataBaseConnection();
-        System.out.println("Polaczenie z baza: " + base.getConnection());
-        String query = "SELECT imie FROM klient WHERE idKlienta = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, 11);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        System.out.println("Wynik z testowego Query: " + rs.getString(1));
+    public Connection getConnection() {
+        return connection;
     }
 }
