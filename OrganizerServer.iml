@@ -9,6 +9,18 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="simplejavamail.batch.module" level="project" />
+    <orderEntry type="library" name="simplejavamail.core.module" level="project" />
+    <orderEntry type="library" name="Maven: org.simplejavamail:simple-java-mail:7.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.simplejavamail:core-module:7.5.0" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.mail:jakarta.mail:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sanctionco.jmail:jmail:1.2.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.bbottema:jetbrains-runtime-annotations:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.3" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.30" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.19.4" level="project" />
   </component>

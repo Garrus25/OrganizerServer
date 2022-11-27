@@ -7,10 +7,12 @@ public final class DataBaseConnection {
     private final String username = "root";
     private final String password = "";
 
+    private final String DRIVER_MYSQL_CLASS="com.mysql.cj.jdbc.Driver";
+
 
     private DataBaseConnection() throws SQLException {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DRIVER_MYSQL_CLASS);
             this.connection = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -24,7 +26,7 @@ public final class DataBaseConnection {
         return instance;
     }
 
-    public Connection getConnection() {
+    public  Connection getConnection() {
         return connection;
     }
 }
