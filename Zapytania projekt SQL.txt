@@ -1,0 +1,14 @@
+1. Czy taka nazwa uzytkownika jest już w bazie? -> Select login from user where login = 'hgalanty';  
+2. Zapis użytkownika do bazy przy rejestracji wraz z kodem. INSERT INTO user VALUES ('1', 'hgalanty', 1qazxsw2!, 'hgalanty@op.pl', 'Hubert', 'Galanty');
+3. Sprawdzenie czy kod dla użytkownika poprawmy select ID_USER, ID_GROUP from user join groups_users USING(ID_USER) join groups (ID_GROUP) where ID_USER = '1' and ID_GROUP = '10';
+4  Czy użytkownik o takich danych mail,login istnieje Select email, login from user where login = 'hgalanty' and email = 'hgalanty@op.pl' is not null;
+5  Dodanie użytkownika do grupy. Insert into groups_users (ID_USER, ID_GROUP) VALUES ('1', '10');   
+6  Usunięcie z grupy DELETE FROM groups_users where ID_USER = '1' and ID_GROUP = '10';
+7  Zapis tokenu resetu hasła ?
+8  Usunięcie użytkownika Delete ID_USER from user where ID_USER = '2';
+9  Dodanie wpisu INSERT INTO user VALUES ('1', 'hgalanty', 1qazxsw2!, 'hgalanty@op.pl', 'Hubert', 'Galanty');
+10 Usuniecie wpisu DELETE FROM user WHERE ID_USER = 1;
+11 Modyfikacja wpisu. UPDATE tasks_users SET IS_DISPLAY = "blue" WHERE IS_DISPLAY = "green";
+12 zmiana koloru użytkownika. UPDATE tasks_users SET IS_DISPLAY = "purple" WHERE IS_DISPLAY = "blue"; 
+13. przypisania użytkownika id zadania i koloru: insert into tasks_users (ID_USER, ID_TASK, IS_DISPLAY) values ('4', 'T4', 'black');
+                                          
