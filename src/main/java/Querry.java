@@ -65,6 +65,20 @@ public class Querry {
         return true;
     }
 
+    boolean isGroupExist(int groupID) throws SQLException {
+        checkConnection();
+        String statement = "SELECT * FROM groups where ID_GROUP = ?";
+        PreparedStatement querry = connection.prepareStatement(statement);
+        querry.setInt(1, groupID);
+        ResultSet result = querry.executeQuery();
+        if(!result.isBeforeFirst()){
+            disconnect();
+            return false;
+        }
+        disconnect();
+        return true;
+    }
+
     boolean isGroupCodeExist(String groupCode) throws SQLException {
         checkConnection();
         String statement = "SELECT * FROM groups where GROUP_CODE = ?";
@@ -270,7 +284,6 @@ public class Querry {
     }
 
 
-
     //8. Usunięcie użytkownika
     void deleteUser(int userID) throws SQLException{
         checkConnection();
@@ -298,14 +311,41 @@ public class Querry {
         disconnect();
     }
 
-    //TODO usuń podaną grupę
+    //usuń podaną grupę
     void deleteGroup(int groupID) throws SQLException{
+        checkConnection();
 
+        if(isGroupExist(groupID)) {
+            checkConnection();
+            String statement = "DELETE FROM groups_users WHERE ID_GROUP = ?";
+            PreparedStatement querry = connection.prepareStatement(statement);
+            querry.setInt(1, groupID);
+            querry.executeUpdate();
+
+            String statementG = "DELETE FROM groups WHERE ID_GROUP = ?";
+            PreparedStatement querryG = connection.prepareStatement(statementG);
+            querryG.setInt(1, groupID);
+            querryG.executeUpdate();
+        }
+        disconnect();
     }
 
-    //TODO usuń podane zadanie
+    //usuń wybrane zadanie
     void deleteTask(int taskID) throws SQLException{
+        checkConnection();
+        if(isTaskExist(taskID)) {
+            checkConnection();
+            String statement = "DELETE FROM tasks_users WHERE ID_TASK = ?";
+            PreparedStatement querry = connection.prepareStatement(statement);
+            querry.setInt(1, taskID);
+            querry.executeUpdate();
 
+            String statementG = "DELETE FROM tasks WHERE ID_TASK = ?";
+            PreparedStatement querryG = connection.prepareStatement(statementG);
+            querryG.setInt(1, taskID);
+            querryG.executeUpdate();
+        }
+        disconnect();
     }
 
     // Sprawdź czy task jest już w bazie
@@ -314,6 +354,19 @@ public class Querry {
         String statement = "SELECT ID_TASK FROM task WHERE NAME = ?";
         PreparedStatement querry = connection.prepareStatement(statement);
         querry.setString(1, name);
+        ResultSet result = querry.executeQuery();
+        if(result.isBeforeFirst()){
+            disconnect();
+            return true;
+        }
+        disconnect();
+        return false;
+    }
+    boolean isTaskExist(int taskID) throws SQLException{
+        checkConnection();
+        String statement = "SELECT ID_TASK FROM task WHERE ID_TASK = ?";
+        PreparedStatement querry = connection.prepareStatement(statement);
+        querry.setInt(1, taskID);
         ResultSet result = querry.executeQuery();
         if(result.isBeforeFirst()){
             disconnect();
