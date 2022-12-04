@@ -272,7 +272,6 @@ public class Querry {
 
 
     //8. Usunięcie użytkownika
-    //TODO trzeba dodać usunięcie z przypisanych grup i tasków po usunięciu użytkownika
     void deleteUser(int userID) throws SQLException{
         checkConnection();
         if(isUserExist(userID)){
