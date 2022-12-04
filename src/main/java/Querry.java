@@ -476,7 +476,7 @@ public class Querry {
             querry.setInt(3, 0); //domyślnie 0 jako niewyświetlone zadanie
             querry.executeUpdate();
         }
-        else{}
+        else{System.out.println("Użytkownik jest już przypisany do tego zadania");}
         disconnect();
     }
 
