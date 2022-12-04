@@ -9,11 +9,11 @@ public class Main {
         querry.addGroup("SUPER Grupa1", "SUP2");
         querry.addGroup("SUPER Grupa3", "SUP3");
         querry.addUserToGroup(querry.returnUserID("krzysiek1"), querry.returnGroupID("SUPER Grupa"));
-        querry.addUserToGroup(2, 1);
-        querry.addUserToGroup(1, 2);
-        querry.addUserToGroup(1, 3);
+        querry.addUserToGroup(querry.returnUserID("krzysiek2"), 1);
+        querry.addUserToGroup(querry.returnUserID("krzysiek1"), 2);
+        querry.addUserToGroup(querry.returnUserID("krzysiek1"), 3);
         querry.addTask("task1", "opis1");
-        querry.addTaskForUser(1, 1);
-        querry.deleteUser(1);
+        querry.addTaskForUser(querry.returnUserID("krzysiek1"), 1);
+        querry.deleteUser(querry.returnUserID("krzysiek1"));
     }
 }

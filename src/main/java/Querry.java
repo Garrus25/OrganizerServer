@@ -97,18 +97,18 @@ public class Querry {
 
     boolean isUserInGroup(int userID, int groupID) throws SQLException {
         checkConnection();
-        String statement = "SELECT ID_USER, ID_GROUP FROM groups_users WHERE ID_USER = ? AND ID_GROUP = ?";
+        String statement = "SELECT ID_USER FROM groups_users WHERE ID_USER = ? AND ID_GROUP = ?";
         PreparedStatement querry = connection.prepareStatement(statement);
         querry.setInt(1, userID);
         querry.setInt(2, groupID);
         ResultSet result = querry.executeQuery();
-        if(!result.isBeforeFirst()){    //jeżeli zapytanie nie znajdzie rekordu i zwróci pusty wiersz
+        if(result.isBeforeFirst()){    //jeżeli zapytanie nie znajdzie rekordu i zwróci pusty wiersz
             disconnect();
-            return false;
+            return true;
         }
         else {
             disconnect();
-            return true;
+            return false;
         }
     }
 
@@ -342,7 +342,7 @@ public class Querry {
 
     boolean isUserInTask(int userID, int taskID) throws SQLException{
         checkConnection();
-        String statement = "SELECT ID_USER, ID_TASK FROM tasks_users WHERE ID_USER = ? AND ID_TASK = ?";
+        String statement = "SELECT ID_USER FROM tasks_users WHERE ID_USER = ? AND ID_TASK = ?";
         PreparedStatement querry = connection.prepareStatement(statement);
         querry.setInt(1, userID);
         querry.setInt(2, taskID);
