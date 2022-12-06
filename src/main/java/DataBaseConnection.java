@@ -3,7 +3,7 @@ import java.sql.*;
 public final class DataBaseConnection {
     private static DataBaseConnection instance;
     private Connection connection;
-    private final String url = "jdbc:mysql://localhost:3306/greenhouse";
+    private final String url = "jdbc:mysql://localhost:3306/organizer";
     private final String username = "root";
     private final String password = "";
 

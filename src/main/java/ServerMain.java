@@ -1,11 +1,14 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import responses.ErrorResponse;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -18,8 +21,73 @@ public class ServerMain {
     private static final Integer PORT_NUMBER = 2137;
 
 
-    public static void main(String[] args) throws SQLException {
-        RequestParser parser=new RequestParser();
+
+    private static AsynchronousServerSocketChannel serverChannel;
+    private static Future<AsynchronousSocketChannel> acceptResult;
+    private static AsynchronousSocketChannel clientChannel;
+
+    public static void testMethod() throws IOException {
+        serverChannel = AsynchronousServerSocketChannel.open();
+        InetSocketAddress hostAddress = new InetSocketAddress("localhost", 2137);
+        serverChannel.bind(hostAddress);
+        acceptResult = serverChannel.accept();
+
+        try {
+            clientChannel = acceptResult.get();
+            if ((clientChannel != null) && (clientChannel.isOpen())) {
+                while (true) {
+
+                    ByteBuffer buffer = ByteBuffer.allocate(320);
+                    Future<Integer> readResult = clientChannel.read(buffer);
+
+                    // do some computation
+
+                    readResult.get();
+
+                    buffer.flip();
+                    String message = new String(buffer.array()).trim();
+                    System.out.println(message);
+
+                    RequestParser parser=new RequestParser();
+
+                    ObjectMapper mapper = new ObjectMapper();
+
+
+
+                      Request me = mapper.readValue(message, Request.class);
+
+                    Optional<String> response= parser.parserRequest(me);
+                    System.out.println("Odpowiedź "+response.get());
+
+                    if (message.equals("bye")) {
+                        break; // while loop
+                    }
+                    buffer = ByteBuffer.wrap(new String(message).getBytes());
+                    Future<Integer> writeResult = clientChannel.write(buffer);
+
+                    // do some computation
+                    writeResult.get();
+                    buffer.clear();
+
+                } // while()
+
+                clientChannel.close();
+                serverChannel.close();
+
+            }
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public static void main(String[] args) throws SQLException, IOException {
+
+        testMethod();
+
+
+        /*RequestParser parser=new RequestParser();
 
         try (AsynchronousServerSocketChannel server = AsynchronousServerSocketChannel.open()) {
 
@@ -27,16 +95,21 @@ public class ServerMain {
 
             while (true) {
 
+
+
+            System.out.println("Czekam");
             Future<AsynchronousSocketChannel> acceptCon = server.accept();
             AsynchronousSocketChannel client = acceptCon.get(TIME_TO_WAIT_ON_REQUEST_SECONDS, TimeUnit.SECONDS);
 
             if ((client != null) && (client.isOpen())) {
+                System.out.println("Odebrano odpowiedź");
                 ByteBuffer buffer = ByteBuffer.allocate(BUFFER_CAPACITY_IN_BYTES);
                 Future<Integer> readValueFromClient = client.read(buffer);
 
                 System.out.println("Received from client: " + new String(buffer.array()).trim());
 
                 Optional<String> response= parser.parserRequest(new String(buffer.array()).trim());
+                System.out.println("Odpowiedź "+response.get());
                 readValueFromClient.get();
                 buffer.flip();
 
@@ -64,7 +137,7 @@ public class ServerMain {
       } catch(Exception e){
          e.printStackTrace();
     }
-
+*/
   }
 
 

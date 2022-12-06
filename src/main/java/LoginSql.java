@@ -1,5 +1,5 @@
 public enum  LoginSql {
-    IS_USER_EXIST("","Is user exists");
+    IS_USER_EXIST("SELECT COUNT(*) FROM USER WHERE USER.LOGIN = \"","Is user exists");
 
     LoginSql(String sqlText, String sqlDescription){
         this.sqlText=sqlText;
