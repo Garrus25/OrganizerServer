@@ -1,19 +1,40 @@
+import Data.Request;
+import Data.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.swing.text.html.Option;
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class RequestParser {
 
-    private LoginService loginService;
+    List<Function<Request, Response>> requestHandlers;
 
-    public RequestParser() throws SQLException {
-        this.loginService=new LoginService();
+
+    private void registerRequestHandler(List<Function<Request,Response>> handlers){
+
     }
 
+    public RequestParser() throws SQLException {
+       requestHandlers=new ArrayList<>();
+    }
+
+
+
+    public Optional<String> requestParser(Request request){
+        List<Function<Request,Optional<String>>> req=services.getRequestsHandler();
+        for(Function<Request,Optional<String>> x:req){
+         Optional<String> resuta=   x.apply(request);
+
+         if(resuta.isPresent()){
+             return resuta;
+         }
+
+        }
+        return Optional.empty();
+    }
 
     public Optional<String> parserRequest(Request requestText) throws JsonProcessingException {
 
@@ -22,7 +43,7 @@ public class RequestParser {
 
 
 
-      //  Request me = mapper.readValue(requestText, Request.class);
+      //  Data.Request me = mapper.readValue(requestText, Data.Request.class);
 
 
 

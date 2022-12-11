@@ -1,3 +1,5 @@
+package Data;
+
 public class ResponseLogin {
     private String name;
     private String response;

@@ -1,5 +1,5 @@
+import Data.Request;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import responses.ErrorResponse;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class ServerMain {
 
@@ -19,9 +18,6 @@ public class ServerMain {
     private static final String SERVER_ADDRESS = "127.0.0.1";
 
     private static final Integer PORT_NUMBER = 2137;
-
-
-
     private static AsynchronousServerSocketChannel serverChannel;
     private static Future<AsynchronousSocketChannel> acceptResult;
     private static AsynchronousSocketChannel clientChannel;
@@ -39,9 +35,7 @@ public class ServerMain {
 
                     ByteBuffer buffer = ByteBuffer.allocate(320);
                     Future<Integer> readResult = clientChannel.read(buffer);
-
                     // do some computation
-
                     readResult.get();
 
                     buffer.flip();
@@ -49,12 +43,8 @@ public class ServerMain {
                     System.out.println(message);
 
                     RequestParser parser=new RequestParser();
-
                     ObjectMapper mapper = new ObjectMapper();
-
-
-
-                      Request me = mapper.readValue(message, Request.class);
+                    Request me = mapper.readValue(message, Request.class);
 
                     Optional<String> response= parser.parserRequest(me);
                     System.out.println("Odpowiedź "+response.get());

@@ -1,3 +1,5 @@
+package Database;
+
 import java.sql.*;
 
 public final class DataBaseConnection {
