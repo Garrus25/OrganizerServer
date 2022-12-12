@@ -10,23 +10,31 @@ import java.util.function.Function;
 
 public class RequestParser {
 
-    List<Function<Request, Response>> requestHandlers;
+    List<Function<Request, Optional<Response>>> requestHandlers;
+    LoginRequestHandler loginRequestHandler;
+
+    private void registerRequestHandler(List<Function<Request,Optional<Response>>> handlers){
+        requestHandlers.addAll(handlers);
+    }
 
 
-    private void registerRequestHandler(List<Function<Request,Response>> handlers){
-
+    private void registerClassRequestParser(){
+        registerRequestHandler(loginRequestHandler.getRequestsHandler());
     }
 
     public RequestParser() throws SQLException {
        requestHandlers=new ArrayList<>();
+       loginRequestHandler=new LoginRequestHandler();
+       registerClassRequestParser();
+       System.out.println(requestHandlers.size());
     }
 
 
 
-    public Optional<String> requestParser(Request request){
-        List<Function<Request,Optional<String>>> req=services.getRequestsHandler();
-        for(Function<Request,Optional<String>> x:req){
-         Optional<String> resuta=   x.apply(request);
+    public Optional<Response> requestParser(Request request){
+
+        for(Function<Request,Optional<Response>> x:requestHandlers){
+         Optional<Response> resuta=   x.apply(request);
 
          if(resuta.isPresent()){
              return resuta;
@@ -36,7 +44,7 @@ public class RequestParser {
         return Optional.empty();
     }
 
-    public Optional<String> parserRequest(Request requestText) throws JsonProcessingException {
+  /*  public Optional<String> parserRequest(Request requestText) throws JsonProcessingException {
 
 
         //ObjectMapper mapper = new ObjectMapper();
@@ -61,6 +69,6 @@ public class RequestParser {
 
         return response;
 
-    }
+    }*/
 
 }

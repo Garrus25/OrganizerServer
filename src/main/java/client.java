@@ -1,4 +1,6 @@
+import Data.LoginData;
 import Data.Request;
+import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class client {
             //String str= "{header:'IfUserLoginAvailable',data:'kk'}";
 
            // String carAsString = objectMapper.writeValueAsString(car);
-            Request x=new Request("ifUserLoginAvailable","gg");
+            Request x=new Request("ifUserLoginAvailable", SaveDataAsJson.saveDataAsJson(new LoginData("Pawe")));
             ObjectMapper mapper = new ObjectMapper();
             String json=mapper.writeValueAsString(x);
             System.out.println(json);

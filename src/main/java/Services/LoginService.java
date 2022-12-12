@@ -24,9 +24,38 @@ public class LoginService {
     //If User Login Available
     public Optional<Response> ifUserLoginAvailable(String data) throws SQLException, JsonProcessingException {
 
-        ResultSet result= QueryManager.getRSFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class));
 
-        assert result != null;
+        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class),
+                (result)->{
+                    try {
+                        System.out.println("Sprawdzam");
+                        if(result.next()){
+                            System.out.println("Sprawdzam first");
+                            String isUserAboutLoginExists= String.valueOf(result.getInt(1));
+                            System.out.println(isUserAboutLoginExists);
+
+                            if(!isUserAboutLoginExists.trim().equals("0")){
+                                System.out.println("11");
+                                ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","NO");
+                                String json=SaveDataAsJson.saveDataAsJson(responseLogin);
+                                return Optional.of( new Response(json,"isLoginAvailable"));
+                            }else{
+                                System.out.println("22");
+                                ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","YES");
+                                String json=SaveDataAsJson.saveDataAsJson(responseLogin);
+                                System.out.println("Asdfadsfdasf");
+                                return Optional.of(new Response(json,"isLoginAvailable"));
+                            }
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                });
+        return resultx;
+      /*  assert result != null;
         if(result.first()){
             String isUserAboutLoginExists= String.valueOf(result.getInt(1));
             if(!isUserAboutLoginExists.equals("0")){
@@ -39,8 +68,8 @@ public class LoginService {
             String json=SaveDataAsJson.saveDataAsJson(responseLogin);
             return Optional.of(new Response(json,"isLoginAvailable"));
         }
+*/
 
-        return null;
     }
 
 

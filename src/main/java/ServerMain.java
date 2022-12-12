@@ -1,4 +1,6 @@
 import Data.Request;
+import Data.Response;
+import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -46,8 +48,10 @@ public class ServerMain {
                     ObjectMapper mapper = new ObjectMapper();
                     Request me = mapper.readValue(message, Request.class);
 
-                    Optional<String> response= parser.parserRequest(me);
-                    System.out.println("Odpowiedź "+response.get());
+                    Optional<Response> response= parser.requestParser(me);
+                    System.out.println("Odpowiedź "+response.get().getData());
+
+                    message= SaveDataAsJson.saveDataAsJson(response.get());
 
                     if (message.equals("bye")) {
                         break; // while loop

@@ -1,8 +1,14 @@
 package Data;
 
+import com.mysql.cj.log.Log;
+
 public class LoginData {
     private String login;
 
+
+    public LoginData(){
+
+    }
     public LoginData(String login) {
         this.login = login;
     }

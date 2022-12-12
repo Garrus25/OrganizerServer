@@ -1,8 +1,13 @@
 package Database;
 
+import Data.Response;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class QueryManager {
     private static DataBaseConnection connectionDb;
@@ -16,22 +21,24 @@ public class QueryManager {
     }
 
 
-    public static ResultSet getRSFromSQL(String sql, List<Object> args, List<Class> type) {
+    public static Optional<Response> getRSFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func) {
+        List returnData=new ArrayList();
         try (Connection connection = connectionDb.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < args.size(); ++i) {
-                if (type.get(i).getClass().equals(String.class)) {
-                    statement.setString(i, ((String) args.get(i)));
-                } else if (type.get(i).getClass().equals(Integer.class)) {
-                    statement.setInt(i, (Integer) args.get(i));
+                if (type.get(i).equals(String.class)) {
+                    System.out.println("typ string");
+                    statement.setString(i+1, ((String) args.get(i)));
+                } else if (type.get(i).equals(Integer.class)) {
+                    statement.setInt(i+1, (Integer) args.get(i));
                 }
             }
 
 
+            System.out.println(statement);
+
             ResultSet resultSet = statement.executeQuery();
-
-
-            return resultSet;
+            return func.apply(resultSet);
 
         } catch (Exception x) {
 
