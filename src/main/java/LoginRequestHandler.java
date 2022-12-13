@@ -18,23 +18,12 @@ public class LoginRequestHandler extends RequestService {
         registerHandlersForClass();
     }
 
-
     public void add_isLoginAvailavle() {
-        addRequestHandler((Request x)->{
-            try {
-                logger.info("Check request in isLoginAvailable ? "+x.getHeader());
-                System.out.println("Check request in isLoginAvailable ? "+x.getHeader());
-                if(x.getHeader().equals("ifUserLoginAvailable")) {
-                    LoginData loginData = ReadObjectFromJson.read(x.getData(), LoginData.class);
-                    Optional<Response> response = loginService.ifUserLoginAvailable(loginData.getLogin());
-                    return response;
-                }else {
-                    return Optional.empty();
-                }
-            } catch (JsonProcessingException | SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        addRequestHandler((Request x)-> analiseRequest("ifUserLoginAvailable",x,(xx)->{
+                LoginData loginData = ReadObjectFromJson.read(xx.getData(), LoginData.class);
+                Optional<Response>  response = loginService.ifUserLoginAvailable(loginData.getLogin());
+                return response;
+        }));
     }
 
 

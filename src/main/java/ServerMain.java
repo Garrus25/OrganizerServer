@@ -46,7 +46,12 @@ public class ServerMain {
 
                     RequestParser parser=new RequestParser();
                     ObjectMapper mapper = new ObjectMapper();
+
+                  //  String textPurpose=mapper.readValue( "{\"idUser\":1,\"login\":\"konrad\",\"password\":\"testowe\",\"name\":\"Konrad\",\"surname\":\"Ktoś\",\"color\":\"#121212\",\"authorizeToken\":1922,\"email\":\"email@mail\",\"active\":false}",String.class);
+                 //   System.out.println(":D "+textPurpose);
+
                     Request me = mapper.readValue(message, Request.class);
+
 
                     Optional<Response> response= parser.requestParser(me);
                     System.out.println("Odpowiedź "+response.get().getData());

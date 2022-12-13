@@ -1,6 +1,11 @@
+import Data.CheckedFunction;
+import Data.LoginData;
 import Data.Request;
 import Data.Response;
+import JSONUtility.ReadObjectFromJson;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +22,22 @@ public abstract class RequestService {
 
    public List<Function<Request,Optional<Response>>> getRequestsHandler(){
        return listRequestsHandler;
+   }
+
+
+   public Optional<Response> analiseRequest(String nameGoalRequest, Request req , CheckedFunction<Request,Optional<Response>> func){
+
+       try {
+           if (req.getHeader().equals(nameGoalRequest)) {
+               return func.apply(req);
+           } else {
+               return Optional.empty();
+           }
+       }catch (Exception exp){
+        throw   new RuntimeException("xD");
+       }
+
+
+
    }
 }

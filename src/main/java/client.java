@@ -1,4 +1,5 @@
 import Data.LoginData;
+import Data.RegisterData;
 import Data.Request;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,8 +26,12 @@ public class client {
 
            // String carAsString = objectMapper.writeValueAsString(car);
             Request x=new Request("ifUserLoginAvailable", SaveDataAsJson.saveDataAsJson(new LoginData("Pawe")));
+
+            RegisterData userDataREgister=new RegisterData(1,"konrad","testowe","email@mail","Konrad","Ktoś","#121212",1922,false);
+
+            Request xx=new Request("registerUserTemporary", SaveDataAsJson.saveDataAsJson(userDataREgister));
             ObjectMapper mapper = new ObjectMapper();
-            String json=mapper.writeValueAsString(x);
+            String json=mapper.writeValueAsString(xx);
             System.out.println(json);
 
 

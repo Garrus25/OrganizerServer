@@ -21,6 +21,30 @@ public class QueryManager {
     }
 
 
+
+    public static void executeQuery(String sql, List<Object> args, List<Class> type) {
+
+        try (Connection connection = connectionDb.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < args.size(); ++i) {
+                if (type.get(i).equals(String.class)) {
+                    System.out.println("typ string");
+                    statement.setString(i+1, ((String) args.get(i)));
+                } else if (type.get(i).equals(Integer.class)) {
+                    statement.setInt(i+1, (Integer) args.get(i));
+                }else if(type.get(i).equals(Boolean.class)){
+                    statement.setInt(i+1,(Integer) args.get(i));
+                }
+            }
+
+            statement.executeQuery();
+
+
+        } catch (Exception x) {
+
+        }
+
+    }
     public static Optional<Response> getRSFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func) {
         List returnData=new ArrayList();
         try (Connection connection = connectionDb.getConnection();
