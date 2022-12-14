@@ -1,7 +1,9 @@
 import Data.Request;
 import Data.Response;
 import JSONUtility.SaveDataAsJson;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -42,15 +44,25 @@ public class ServerMain {
 
                     buffer.flip();
                     String message = new String(buffer.array()).trim();
-                    System.out.println(message);
+                    System.out.println(":"+message);
+
+
+                    StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                    encryptor.setPassword("xD");
+
+
 
                     RequestParser parser=new RequestParser();
                     ObjectMapper mapper = new ObjectMapper();
 
                   //  String textPurpose=mapper.readValue( "{\"idUser\":1,\"login\":\"konrad\",\"password\":\"testowe\",\"name\":\"Konrad\",\"surname\":\"Ktoś\",\"color\":\"#121212\",\"authorizeToken\":1922,\"email\":\"email@mail\",\"active\":false}",String.class);
                  //   System.out.println(":D "+textPurpose);
-
+                    mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
                     Request me = mapper.readValue(message, Request.class);
+
+                    String decrypted = encryptor.decrypt(me.getData());
+                    System.out.println(decrypted);
+                    me.setData(decrypted);
 
 
                     Optional<Response> response= parser.requestParser(me);

@@ -100,4 +100,19 @@ public class RegisterData {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterData{" +
+                "idUser=" + idUser +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", color='" + color + '\'' +
+                ", authorizeToken=" + authorizeToken +
+                ", isActive=" + isActive +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -18,9 +18,26 @@ public class RegisterService {
 
     public Optional<Response> registerTemporaryUser(RegisterData registerData) throws SQLException, JsonProcessingException {
 
-        List<Object> list = Collections.singletonList(new ArrayList<Object>() {
+
+        System.out.println("Working xxd"+registerData);
+
+        List<Object> list=new ArrayList<Object>(){
             {
-                add(new Integer(registerData.getIdUser()));
+                add(    (Object)    registerData.getLogin());
+                add(        registerData.getPassword());
+                add(registerData.getEmail());
+                add(    registerData.getName());
+                add(      registerData.getSurname());
+                add(      registerData.getColor());
+                add(      registerData.getAuthorizeToken());
+                add(     Boolean.FALSE);
+            }
+        };
+
+        /*
+        List<Object> list = new ArrayList<Object>() {
+            {
+
                 add(        registerData.getLogin());
                         add(        registerData.getPassword());
                                 add(registerData.getEmail());
@@ -29,18 +46,20 @@ public class RegisterService {
                                                         add(      registerData.getColor());
                                                                 add(      registerData.getAuthorizeToken());
                                                                 add(     Boolean.FALSE);
-            } });
+            } };);
+*/
 
+        System.out.println((String)list.get(0));
 
         List<Class> args=new ArrayList<Class>(){{
-           add( Integer.class);
+
            add(String.class);
             add(String.class);
             add(String.class);
             add(String.class);
             add(String.class);
             add(String.class);
-            add(String.class);
+            add(Integer.class);
             add(Boolean.class);
 
         }};

@@ -3,6 +3,7 @@ import Data.RegisterData;
 import Data.Request;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -29,7 +30,17 @@ public class client {
 
             RegisterData userDataREgister=new RegisterData(1,"konrad","testowe","email@mail","Konrad","Ktoś","#121212",1922,false);
 
-            Request xx=new Request("registerUserTemporary", SaveDataAsJson.saveDataAsJson(userDataREgister));
+
+
+            StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+            encryptor.setPassword("xD");
+            String encrypted= encryptor.encrypt(SaveDataAsJson.saveDataAsJson(userDataREgister));
+
+            Request xx=new Request("registerUserTemporary", "\""+encrypted+"\"");
+
+
+
+
             ObjectMapper mapper = new ObjectMapper();
             String json=mapper.writeValueAsString(xx);
             System.out.println(json);

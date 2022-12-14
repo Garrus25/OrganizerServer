@@ -16,16 +16,6 @@ Request {
 
 
 
-    @JsonProperty(value = "data")
-    public void setJsonRaw(JsonNode jsonNode) throws IOException {
-        // this leads to non-standard json, see discussion:
-        // setJson(jsonNode.toString());
-
-       data=jsonNode.asText();
-    }
-
-
-    @JsonRawValue
     private String data;
 
     public Request(String header, String data) {
