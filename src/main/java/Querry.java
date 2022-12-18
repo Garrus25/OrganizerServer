@@ -208,12 +208,14 @@ public class Querry {
     //5. Dodanie użytkownika do grupy.
     void addUserToGroup(int userID, int groupID) throws SQLException {
         if(!isUserInGroup(userID, groupID)){
-            checkConnection();
-            String statement = "INSERT INTO groups_users VALUES (?, ?)";
-            PreparedStatement querry = connection.prepareStatement(statement);
-            querry.setInt(1, userID);
-            querry.setInt(2, groupID);
-            querry.executeUpdate();
+            if(isGroupExist(groupID) && isUserExist(userID)) {
+                checkConnection();
+                String statement = "INSERT INTO groups_users VALUES (?, ?)";
+                PreparedStatement querry = connection.prepareStatement(statement);
+                querry.setInt(1, userID);
+                querry.setInt(2, groupID);
+                querry.executeUpdate();
+            }
         }
         else{System.out.println("Ten uzytkownik jest juz przypisany do podanej grupy.");}
         disconnect();
@@ -340,7 +342,7 @@ public class Querry {
             querry.setInt(1, taskID);
             querry.executeUpdate();
 
-            String statementG = "DELETE FROM tasks WHERE ID_TASK = ?";
+            String statementG = "DELETE FROM task WHERE ID_TASK = ?";
             PreparedStatement querryG = connection.prepareStatement(statementG);
             querryG.setInt(1, taskID);
             querryG.executeUpdate();
@@ -468,15 +470,17 @@ public class Querry {
     //dodaj użytkownika do taska
     void addTaskForUser(int userID, int taskID) throws SQLException{
         if(!isUserInTask(userID, taskID)){
-            checkConnection();
-            String statement = "INSERT INTO tasks_users VALUES (?, ?, ?)";
-            PreparedStatement querry = connection.prepareStatement(statement);
-            querry.setInt(1, userID);
-            querry.setInt(2, taskID);
-            querry.setInt(3, 0); //domyślnie 0 jako niewyświetlone zadanie
-            querry.executeUpdate();
+            if(isUserExist(userID) && isTaskExist(taskID)) {
+                checkConnection();
+                String statement = "INSERT INTO tasks_users VALUES (?, ?, ?)";
+                PreparedStatement querry = connection.prepareStatement(statement);
+                querry.setInt(1, userID);
+                querry.setInt(2, taskID);
+                querry.setInt(3, 0); //domyślnie 0 jako niewyświetlone zadanie
+                querry.executeUpdate();
+            }
         }
-        else{System.out.println("Uzytkownik jest juz przypisany do tego zadania");}
+        else{System.out.println("Uzytkownik jest juz przypisany do tego zadania lub nie istnieje");}
         disconnect();
     }
 
