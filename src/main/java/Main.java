@@ -15,5 +15,9 @@ public class Main {
         querry.addTask("task1", "opis1");
         querry.addTaskForUser(querry.returnUserID("krzysiek1"), 1);
         querry.deleteUser(querry.returnUserID("krzysiek1"));
+        querry.addTaskForUser(querry.returnUserID("krzysiek2"), 1);
+        System.out.println(querry.isDisplay(5, 1));
+        querry.setDisplay(5,1, true);
+        System.out.println(querry.isDisplay(5, 1));
     }
 }

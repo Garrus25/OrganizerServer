@@ -250,7 +250,7 @@ public class Querry {
             querry.setInt(2, groupID);
             querry.executeUpdate();
         }
-        else {System.out.println("Wybrany użytkownik nie jest członkiem takiej grupy.");}
+        else {System.out.println("Wybrany uzytkownik nie jest czlonkiem takiej grupy.");}
         disconnect();
     }
 
@@ -476,7 +476,7 @@ public class Querry {
             querry.setInt(3, 0); //domyślnie 0 jako niewyświetlone zadanie
             querry.executeUpdate();
         }
-        else{System.out.println("Użytkownik jest już przypisany do tego zadania");}
+        else{System.out.println("Uzytkownik jest juz przypisany do tego zadania");}
         disconnect();
     }
 
@@ -493,13 +493,14 @@ public class Querry {
         else {
             querry.setInt(1,0);     // w przeciwnym razie ustaw 0 jako niewyświetlone
         }
+        querry.executeUpdate();
         disconnect();
     }
 
     //zwraca czy dany user wyświetlił task
     boolean isDisplay(int userID, int taskID) throws SQLException{
         checkConnection();
-        String statement = "SELECT IS_DISPLAY FROM task_users WHERE ID_USER = ? AND ID_TASK = ?";
+        String statement = "SELECT IS_DISPLAY FROM tasks_users WHERE ID_USER = ? AND ID_TASK = ?";
         PreparedStatement querry = connection.prepareStatement(statement);
         querry.setInt(1, userID);
         querry.setInt(2, taskID);
