@@ -26,5 +26,9 @@ public class Main {
         querry.addTaskDescription(2, "OPIS11");
         System.out.println(querry.returnTaskDescription(2));
         //querry.deleteTask(1);
+        querry.setPassword(5,2138, "Hasloo2");
+        querry.setAuthenticationToken(5, 2139);
+        querry.setPassword(5,2138, "Hasloo3");
+        querry.setPassword(5,2139, "Hasloo4");
     }
 }

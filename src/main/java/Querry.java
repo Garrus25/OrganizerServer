@@ -525,6 +525,22 @@ public class Querry {
         return false;
     }
 
+    void setPassword(int userID, int token, String newPassword) throws SQLException{
+        checkConnection();
+        String statement = "UPDATE user SET password = ? WHERE ID_USER = ?";
+        if(token == returnAuthenticationToken(userID)){ //sprawdź czy podany token pokrywa się z zapisanym w bazie
+            checkConnection();
+            PreparedStatement querry = connection.prepareStatement(statement);
+            querry.setString(1, newPassword);
+            querry.setInt(2, userID);
+            querry.executeUpdate();
+        }
+        else{
+            System.out.println("Podany zly token");
+        }
+        disconnect();
+    }
+
 
 
 }
