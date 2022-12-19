@@ -1,6 +1,7 @@
 package Services;
 
 import Data.ResponseLogin;
+import Data.UserID;
 import Database.DataBaseConnection;
 import Data.Response;
 import Database.QueryManager;
@@ -8,6 +9,7 @@ import Database.SQL.SQLQuery;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import responses.ErrorResponse;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,7 +23,38 @@ import java.util.Optional;
 public class LoginService {
 
 
+
+
+    public Optional<Response> getUserIdFromUserLogin(String loginUser){
+        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
+                (result)->{
+                    try {
+
+                        if(result.next()){
+
+                            String userID= String.valueOf(result.getInt(1));
+                            UserID userIdentification=new UserID(userID);
+                            if(userID.length()>0){
+                                String json=SaveDataAsJson.saveDataAsJson(userIdentification);
+                                return Optional.of( new Response(json,"getIdUserFromLogin"));
+                            }
+                        }else{
+
+                            ErrorResponse error=new ErrorResponse("User with this login no exists");
+                            return Optional.of(new Response(error.getErrorCode(),"getIdUserFromLogin"));
+
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                });
+        return resultx;
+    }
     //If User Login Available
+
     public Optional<Response> ifUserLoginAvailable(String data) throws SQLException, JsonProcessingException {
 
 
@@ -55,20 +88,7 @@ public class LoginService {
                     return null;
                 });
         return resultx;
-      /*  assert result != null;
-        if(result.first()){
-            String isUserAboutLoginExists= String.valueOf(result.getInt(1));
-            if(!isUserAboutLoginExists.equals("0")){
-                ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","NO");
-                String json=SaveDataAsJson.saveDataAsJson(responseLogin);
-                return Optional.of( new Response(json,"isLoginAvailable"));
-            }
-        }else{
-            ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","YES");
-            String json=SaveDataAsJson.saveDataAsJson(responseLogin);
-            return Optional.of(new Response(json,"isLoginAvailable"));
-        }
-*/
+
 
     }
 

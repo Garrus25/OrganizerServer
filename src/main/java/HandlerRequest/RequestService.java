@@ -1,3 +1,5 @@
+package HandlerRequest;
+
 import Data.CheckedFunction;
 import Data.LoginData;
 import Data.Request;
@@ -26,7 +28,6 @@ public abstract class RequestService {
 
 
    public Optional<Response> analiseRequest(String nameGoalRequest, Request req , CheckedFunction<Request,Optional<Response>> func){
-
        try {
            if (req.getHeader().equals(nameGoalRequest)) {
                return func.apply(req);
@@ -37,7 +38,8 @@ public abstract class RequestService {
         throw   new RuntimeException("xD");
        }
 
-
-
    }
+
+
+
 }

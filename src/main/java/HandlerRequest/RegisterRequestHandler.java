@@ -1,33 +1,33 @@
-import Data.LoginData;
+package HandlerRequest;
+
 import Data.RegisterData;
 import Data.Request;
 import Data.Response;
 import JSONUtility.ReadObjectFromJson;
-import Services.LoginService;
 import Services.RegisterService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class RegisterRequestHandler extends RequestService {
     private RegisterService registerService;
-  //  private LoginService loginService;
-   // private static final Logger logger = LogManager.getLogger(LoginRequestHandler.class);
+    private String REQUEST_REGISTER_USER_TEMPORARY="registerUserTemporary";
     public RegisterRequestHandler() throws SQLException {
-     //   this.loginService=new LoginService();
         this.registerService=new RegisterService();
         registerHandlersForClass();
     }
 
     public void add_registerUserTemporary() {
-        addRequestHandler((Request x)-> analiseRequest("registerUserTemporary",x,(xx)->{
-            RegisterData loginData = ReadObjectFromJson.read(xx.getData(), RegisterData.class);
+        addRequestHandler((Request request)-> analiseRequest(REQUEST_REGISTER_USER_TEMPORARY,request,(requestArg)->{
+            RegisterData loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
             Optional<Response> response = registerService.registerTemporaryUser(loginData);
             return response;
         }));
     }
+
+    public void add_isValidRegisterCode(){
+
+    }
+
 
 
 

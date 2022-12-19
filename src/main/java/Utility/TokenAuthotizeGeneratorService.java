@@ -1,3 +1,5 @@
+package Utility;
+
 import java.util.Random;
 
 public class TokenAuthotizeGeneratorService {
@@ -5,7 +7,6 @@ public class TokenAuthotizeGeneratorService {
 
     private static final int MIN_DIGIT = 0;
     private static final int MAX_DIGIT = 9;
-
 
     public static int getRandomNumberFromTo(int from,int to){
         return random.nextInt(to - from + 1) + from;

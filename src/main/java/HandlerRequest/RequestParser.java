@@ -1,6 +1,9 @@
+package HandlerRequest;
+
 import Data.Request;
 import Data.Response;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import HandlerRequest.LoginRequestHandler;
+import HandlerRequest.RegisterRequestHandler;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,49 +31,22 @@ public class RequestParser {
        loginRequestHandler=new LoginRequestHandler();
        registerRequestHandler=new RegisterRequestHandler();
        registerClassRequestParser();
-       System.out.println(requestHandlers.size());
+
     }
 
 
 
     public Optional<Response> requestParser(Request request){
 
-        for(Function<Request,Optional<Response>> x:requestHandlers){
-         Optional<Response> resuta=   x.apply(request);
+        for(Function<Request,Optional<Response>> requestHandler:requestHandlers){
+         Optional<Response> resultRequest=   requestHandler.apply(request);
 
-         if(resuta.isPresent()){
-             return resuta;
+         if(resultRequest.isPresent()){
+             return resultRequest;
          }
 
         }
         return Optional.empty();
     }
-
-  /*  public Optional<String> parserRequest(Request requestText) throws JsonProcessingException {
-
-
-        //ObjectMapper mapper = new ObjectMapper();
-
-
-
-      //  Data.Request me = mapper.readValue(requestText, Data.Request.class);
-
-
-
-        System.out.println(requestText.getHeader()+"xd");
-        Optional<String> response=Optional.empty();
-
-        switch (requestText.getHeader()){
-            case "ifUserLoginAvailable":
-                System.out.println("Czy login?");
-                response= Optional.of(loginService.ifUserLoginAvailable(requestText.getData()));
-            break;
-        }
-
-
-
-        return response;
-
-    }*/
 
 }

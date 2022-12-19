@@ -1,3 +1,6 @@
+package Services;
+
+import Utility.TokenAuthotizeGeneratorService;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.config.ConfigLoader;
 import org.simplejavamail.email.EmailBuilder;
@@ -11,7 +14,7 @@ public class MessageMailTextService {
 
 
     private static String createTextMail(){
-        String tokenAuthotizeUser=TokenAuthotizeGeneratorService.createTokenAuthorizeUser();
+        String tokenAuthotizeUser= TokenAuthotizeGeneratorService.createTokenAuthorizeUser();
 
         String message = mailMessage.concat(tokenAuthotizeUser);
         return message;

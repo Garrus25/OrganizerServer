@@ -1,3 +1,4 @@
+package Services;
 
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
@@ -9,8 +10,6 @@ import java.util.Objects;
 
 
 public final class MailerServices {
-
-
     private static Mailer mailer;
 
     static {
@@ -18,7 +17,7 @@ public final class MailerServices {
     }
 
     public static void sendMail(String emailTo) {
-        Email mail=MessageMailTextService.createMail(emailTo);
+        Email mail= MessageMailTextService.createMail(emailTo);
         mailer.sendMail(mail);
         mailer.getOperationalConfig()
                 .getExecutorService().shutdownNow();

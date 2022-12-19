@@ -1,3 +1,5 @@
+
+@Deprecated
 public enum  LoginSql {
     IS_USER_EXIST("SELECT COUNT(*) FROM USER WHERE USER.LOGIN = \"","Is user exists");
 
