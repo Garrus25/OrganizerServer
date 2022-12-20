@@ -1,9 +1,7 @@
 package Services;
 
-import Data.ResponseLogin;
-import Data.UserID;
+import Data.*;
 import Database.DataBaseConnection;
-import Data.Response;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
 import JSONUtility.SaveDataAsJson;
@@ -23,6 +21,38 @@ import java.util.Optional;
 public class LoginService {
 
 
+
+
+    public Optional<Response> isUserLoginDataValid(LoginAndPassword loginAndPassword){
+        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
+                        loginAndPassword.getPassword()}),Arrays.asList(new Class[]{String.class,String.class}),
+                (result)->{
+                    try {
+
+                        if(result.next()){
+
+                            Integer isValid= result.getInt(1);
+
+                            if(isValid>0){
+                                ValidLoginData x=new ValidLoginData("YES");
+                                String json=SaveDataAsJson.saveDataAsJson(x);
+                                return Optional.of( new Response(json,"getIdUserFromLogin"));
+                            }
+                        }else{
+                            ValidLoginData x=new ValidLoginData("NO");
+                            String json=SaveDataAsJson.saveDataAsJson(x);
+                            return Optional.of(new Response(json,"getIdUserFromLogin"));
+
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return null;
+                });
+        return resultx;
+    }
 
 
     public Optional<Response> getUserIdFromUserLogin(String loginUser){

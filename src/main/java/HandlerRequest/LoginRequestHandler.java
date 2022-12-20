@@ -1,10 +1,7 @@
 package HandlerRequest;
 
-import Data.LoginData;
-import Data.UserLogin;
+import Data.*;
 import JSONUtility.ReadObjectFromJson;
-import Data.Request;
-import Data.Response;
 import Services.LoginService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +9,13 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class LoginRequestHandler extends RequestService {
+
     private LoginService loginService;
 
     private String REQUEST_IF_USER_LOGIN_AVAILABLE="ifUserLoginAvailable";
     private String REQUEST_GET_USER_ID_FROM_LOGIN="getIdUserFromLogin";
+
+    private String REQUEST_USER_LOGIN_DATA_VALID="isLoginDataValid";
     public LoginRequestHandler() throws SQLException {
         this.loginService=new LoginService();
         registerHandlersForClass();
@@ -39,11 +39,22 @@ public class LoginRequestHandler extends RequestService {
     }
 
 
+    public void add_isUserLoginDataValid(){
+        addRequestHandler((Request request)-> analiseRequest(REQUEST_USER_LOGIN_DATA_VALID,request,(requestArg)->{
+            LoginAndPassword loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
+
+           Optional< Response> x=  loginService.isUserLoginDataValid(loginData);
+            return x;
+        }));
+    }
+    //isUserLoginDataValid
+
 
     @Override
     public void registerHandlersForClass() {
         add_isLoginAvailavle();
         add_getIdUserFromLogin();
+        add_isUserLoginDataValid();
 
     }
 }
