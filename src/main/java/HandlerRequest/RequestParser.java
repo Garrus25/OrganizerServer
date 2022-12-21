@@ -16,6 +16,11 @@ public class RequestParser {
     List<Function<Request, Optional<Response>>> requestHandlers;
     LoginRequestHandler loginRequestHandler;
     RegisterRequestHandler registerRequestHandler;
+
+    GroupRequestHandler  groupRegisterHandler;
+
+    TaskRequestHandler taskRequestHandler;
+    UserRequestHandler userRequestHandler;
     private void registerRequestHandler(List<Function<Request,Optional<Response>>> handlers){
         requestHandlers.addAll(handlers);
     }
@@ -24,12 +29,18 @@ public class RequestParser {
     private void registerClassRequestParser(){
         registerRequestHandler(loginRequestHandler.getRequestsHandler());
         registerRequestHandler(registerRequestHandler.getRequestsHandler());
+        registerRequestHandler(groupRegisterHandler.getRequestsHandler());
+        registerRequestHandler(taskRequestHandler.getRequestsHandler());
+        registerRequestHandler(userRequestHandler.getRequestsHandler());
     }
 
     public RequestParser() throws SQLException {
        requestHandlers=new ArrayList<>();
        loginRequestHandler=new LoginRequestHandler();
        registerRequestHandler=new RegisterRequestHandler();
+       groupRegisterHandler=new GroupRequestHandler();
+       taskRequestHandler=new TaskRequestHandler();
+       userRequestHandler=new UserRequestHandler();
        registerClassRequestParser();
 
     }
