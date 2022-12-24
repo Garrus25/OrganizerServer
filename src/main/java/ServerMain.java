@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class ServerMain {
 
@@ -38,48 +40,54 @@ public class ServerMain {
             if ((clientChannel != null) && (clientChannel.isOpen())) {
                 while (true) {
 
-                    ByteBuffer buffer = ByteBuffer.allocate(320);
-                    Future<Integer> readResult = clientChannel.read(buffer);
-                    // do some computation
-                    readResult.get();
+                    try {
 
-                    buffer.flip();
-                    String message = new String(buffer.array()).trim();
-                    System.out.println(":"+message);
+                        ByteBuffer buffer = ByteBuffer.allocate(320);
+                        Future<Integer> readResult = clientChannel.read(buffer);
+                        // do some computation
+                        readResult.get();
 
-
-                    StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-                    encryptor.setPassword("xD");
+                        buffer.flip();
+                        String message = new String(buffer.array()).trim();
+                        System.out.println(":" + message);
 
 
 
-                    RequestParser parser=new RequestParser();
-                    ObjectMapper mapper = new ObjectMapper();
-
-                  //  String textPurpose=mapper.readValue( "{\"idUser\":1,\"login\":\"konrad\",\"password\":\"testowe\",\"name\":\"Konrad\",\"surname\":\"Ktoś\",\"color\":\"#121212\",\"authorizeToken\":1922,\"email\":\"email@mail\",\"active\":false}",String.class);
-                 //   System.out.println(":D "+textPurpose);
-                    mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
-                    Request me = mapper.readValue(message, Request.class);
-
-                    String decrypted = encryptor.decrypt(me.getData());
-                    System.out.println(decrypted);
-                    me.setData(decrypted);
+                    //    StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                    //    encryptor.setPassword("xD");
 
 
-                    Optional<Response> response= parser.requestParser(me);
-                    System.out.println("Odpowiedź "+response.get().getData());
+                        RequestParser parser = new RequestParser();
+                        ObjectMapper mapper = new ObjectMapper();
 
-                    message= SaveDataAsJson.saveDataAsJson(response.get());
+                        //  String textPurpose=mapper.readValue( "{\"idUser\":1,\"login\":\"konrad\",\"password\":\"testowe\",\"name\":\"Konrad\",\"surname\":\"Ktoś\",\"color\":\"#121212\",\"authorizeToken\":1922,\"email\":\"email@mail\",\"active\":false}",String.class);
+                        //   System.out.println(":D "+textPurpose);
+                        mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+                        Request me = mapper.readValue(message, Request.class);
 
-                    if (message.equals("bye")) {
-                        break; // while loop
+                     //   String decrypted = encryptor.decrypt(me.getData());
+                    //    System.out.println(decrypted);
+                   //     me.setData(decrypted);
+
+
+                        Optional<Response> response = parser.requestParser(me);
+                        System.out.println("Odpowiedź " + response.get().getData());
+
+                        message = SaveDataAsJson.saveDataAsJson(response.get());
+
+                        if (message.equals("bye")) {
+                            break; // while loop
+                        }
+                        System.out.println("ODP:"+message);
+                        buffer = ByteBuffer.wrap(new String(message).getBytes());
+                        Future<Integer> writeResult = clientChannel.write(buffer);
+
+                        // do some computation
+                        writeResult.get();
+                        buffer.clear();
+                    }catch (Exception exp){
+
                     }
-                    buffer = ByteBuffer.wrap(new String(message).getBytes());
-                    Future<Integer> writeResult = clientChannel.write(buffer);
-
-                    // do some computation
-                    writeResult.get();
-                    buffer.clear();
 
                 } // while()
 
@@ -89,14 +97,82 @@ public class ServerMain {
             }
         } catch (InterruptedException | ExecutionException | IOException e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+        }
+
+
+
+
+    }
+
+
+    public static void testMethod2() throws IOException, ExecutionException, InterruptedException, TimeoutException {
+        serverChannel = AsynchronousServerSocketChannel.open();
+        InetSocketAddress hostAddress = new InetSocketAddress("localhost", 2137);
+        serverChannel.bind(hostAddress);
+        while(true) {
+
+                Future<AsynchronousSocketChannel> acceptCon =
+                        serverChannel.accept();
+                AsynchronousSocketChannel client = acceptCon.get(10,
+                        TimeUnit.SECONDS);
+                if ((client!= null) && (client.isOpen())) {
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    Future<Integer> readval = client.read(buffer);
+                    System.out.println("Received from client: "
+                            + new String(buffer.array()).trim());
+                    readval.get();
+                    buffer.flip();
+                    String str= "I'm fine. Thank you!";
+                    Future<Integer> writeVal = client.write(
+                            ByteBuffer.wrap(str.getBytes()));
+                    System.out.println("Writing back to client: "
+                            +str);
+                    writeVal.get();
+                    buffer.clear();
+                }
+                client.close();
+
+
+
         }
 
     }
-    public static void main(String[] args) throws SQLException, IOException {
 
-        testMethod();
+
+    public static void main(String[] args){
+        try (AsynchronousServerSocketChannel server =
+                     AsynchronousServerSocketChannel.open()) {
+            server.bind(new InetSocketAddress("127.0.0.1",
+                    2137));
+            Future<AsynchronousSocketChannel> acceptCon =
+                    server.accept();
+            AsynchronousSocketChannel client = acceptCon.get(10,
+                    TimeUnit.SECONDS);
+            if ((client!= null) && (client.isOpen())) {
+                ByteBuffer buffer = ByteBuffer.allocate(1024);
+                Future<Integer> readval = client.read(buffer);
+                System.out.println("Received from client: "
+                        + new String(buffer.array()).trim());
+                readval.get();
+                buffer.flip();
+                String str= "I'm fine. Thank you!";
+                Future<Integer> writeVal = client.write(
+                        ByteBuffer.wrap(str.getBytes()));
+                System.out.println("Writing back to client: "
+                        +str);
+                writeVal.get();
+                buffer.clear();
+            }
+            client.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*
+    public static void main(String[] args) throws SQLException, IOException, ExecutionException, InterruptedException, TimeoutException {
+
+        testMethod2();
 
 
         /*HandlerRequest.RequestParser parser=new HandlerRequest.RequestParser();
@@ -150,7 +226,7 @@ public class ServerMain {
          e.printStackTrace();
     }
 */
-  }
+  //}
 
 
 }

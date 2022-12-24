@@ -14,8 +14,6 @@ import java.util.concurrent.Future;
 
 public class client {
 
-
-
     public static void main(String[] args) throws IOException {
 
         try (AsynchronousSocketChannel client =
