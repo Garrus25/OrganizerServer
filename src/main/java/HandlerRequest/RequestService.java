@@ -35,7 +35,7 @@ public abstract class RequestService {
                return Optional.empty();
            }
        }catch (Exception exp){
-        throw   new RuntimeException("xD");
+        throw   new RuntimeException(exp);
        }
 
    }

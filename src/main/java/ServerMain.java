@@ -4,7 +4,6 @@ import HandlerRequest.RequestParser;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -140,8 +139,15 @@ public class ServerMain {
     }
 
 
-    public static void main(String[] args){
-        try (AsynchronousServerSocketChannel server =
+    public static void startServer() throws IOException, SQLException {
+        ServerApp server=new ServerApp();
+        server.start();
+    }
+
+
+    public static void main(String[] args) throws IOException, SQLException {
+        startServer();
+      /*  try (AsynchronousServerSocketChannel server =
                      AsynchronousServerSocketChannel.open()) {
             server.bind(new InetSocketAddress("127.0.0.1",
                     2137));
@@ -168,6 +174,8 @@ public class ServerMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        */
     }
     /*
     public static void main(String[] args) throws SQLException, IOException, ExecutionException, InterruptedException, TimeoutException {

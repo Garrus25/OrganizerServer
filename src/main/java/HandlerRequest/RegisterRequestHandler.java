@@ -3,49 +3,40 @@ package HandlerRequest;
 import Data.*;
 import JSONUtility.ReadObjectFromJson;
 import Services.RegisterService;
-import java.sql.SQLException;
 import java.util.Optional;
-
 public class RegisterRequestHandler extends RequestService {
-    private RegisterService registerService;
-    private String REQUEST_REGISTER_USER_TEMPORARY="registerUserTemporary";
-    private String REQUEST_IS_CODE_CONFIM_ACCOUNT_VALID="isCodeVerficationValid";
+    private final RegisterService registerService;
 
-    private String REQUEST_REGISTER_USER="registerUser";
-
-
-    public RegisterRequestHandler() throws SQLException {
-        this.registerService=new RegisterService();
+    public RegisterRequestHandler() {
+        this.registerService = new RegisterService();
         registerHandlersForClass();
     }
 
     public void add_registerUserTemporary() {
-        addRequestHandler((Request request)-> analiseRequest(REQUEST_REGISTER_USER_TEMPORARY,request,(requestArg)->{
-            RegisterData loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
-            Optional<Response> response = registerService.registerTemporaryUser(loginData);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.REGISTER_USER_TEMPORARY.getNameRequest(),request,(requestArg)->{
+            RegisterData registerTempData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
+            Optional<Response> response = registerService.registerTemporaryUser(registerTempData);
             return response;
         }));
     }
 
     public void add_isValidRegisterCode(){
-        addRequestHandler((Request request)-> analiseRequest(REQUEST_IS_CODE_CONFIM_ACCOUNT_VALID,request,(requestArg)->{
-            ConfirmCodeData loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
-            Optional<Response> response = registerService.isRegistrationConfirmCodeValid(loginData);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), request,(requestArg)->{
+
+            ConfirmCodeData isValidRegisterCodeData = ReadObjectFromJson.read(requestArg.getData(), ConfirmCodeData.class);
+            Optional<Response> response = registerService.isRegistrationConfirmCodeValid(isValidRegisterCodeData);
             return response;
         }));
     }
 
 
     public void add_registerUser(){
-        addRequestHandler((Request request)-> analiseRequest(REQUEST_REGISTER_USER,request,(requestArg)->{
-            UserID loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
-            registerService.registerUser(loginData);
-           Response x=new Response("register:YES","RegisterUser");
-           return  Optional.of(x);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.REGISTER_USER.getNameRequest(), request,(requestArg)->{
+            UserID registerIdUserData = ReadObjectFromJson.read(requestArg.getData(), UserID.class);
+            Response response = registerService.registerUser(registerIdUserData);
+            return  Optional.of(response);
         }));
     }
-
-
 
 
 

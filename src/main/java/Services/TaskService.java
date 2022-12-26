@@ -18,7 +18,7 @@ public class TaskService {
 
 
     public Optional<Response> getAllTaskForGroup(GroupId idGroup){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_ALL_TASK_FOR_GROUP, Arrays.asList(new Integer[]{idGroup.getGroupId()
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_GROUP, Arrays.asList(new Integer[]{idGroup.getGroupId()
                 }),Arrays.asList(new Class[]{Integer.class}),
                 (result)->{
                     List<TaskData> groupData=new ArrayList<>();
@@ -163,7 +163,7 @@ public class TaskService {
         return Optional.of(new Response("addTask","{Register:YES}"));
     }
     public Optional<Response> getAllTaskForUser(UserID idGroup){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
                 }),Arrays.asList(new Class[]{String.class}),
                 (result)->{
                     List<TaskData> groupData=new ArrayList<>();

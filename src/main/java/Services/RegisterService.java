@@ -3,9 +3,9 @@ package Services;
 import Data.*;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
+import JSONUtility.CodeResponse;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import responses.ErrorResponse;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,15 +15,15 @@ import java.util.Optional;
 
 public class RegisterService {
 
-
-
-
-    public void registerUser(UserID idUser){
+    public Response registerUser(UserID idUser){
         QueryManager.executeQuery(SQLQuery.REGISTER_USER, Collections.singletonList(idUser.getUserID()), Collections.singletonList(String.class));
+        return CodeResponse.OK.getResponseForCode();
     }
 
     public Optional<Response> isRegistrationConfirmCodeValid(ConfirmCodeData code){
 
+        final int INDEX_COL_FROM_DB_WITH_INFO_ABOUT_CODE_VALID=1;
+        final int NO_DATA_IN_DB_WITH_CODE_QUANTITY=0;
         List<Object> dataConfirm=new ArrayList<Object>(){
             {
               add(  code.getConfirmCode());
@@ -31,41 +31,36 @@ public class RegisterService {
             }
         };
 
-        List<Class> typeConfirm=new ArrayList<Class>() {
+        List<Class> typeConfirmData=new ArrayList<Class>() {
             {
                 add(String.class);
-                add(String.class);
+                add(Integer.class);
             }
         };
 
 
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.IS_REGISTRATION_CODE_VALID, dataConfirm,typeConfirm,
-                (result)->{
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.IS_REGISTRATION_CODE_VALID, dataConfirm,typeConfirmData,
+                (resultRows)->{
                     try {
-
-                        if(result.next()){
-
-                            Integer isCodeValid= result.getInt(1);
-
-                            if(isCodeValid>0){
+                        if(resultRows.next()){
+                            int isCodeValid= resultRows.getInt(INDEX_COL_FROM_DB_WITH_INFO_ABOUT_CODE_VALID);
+                            if(isCodeValid>NO_DATA_IN_DB_WITH_CODE_QUANTITY){
                                 ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.TRUE);
                                 String json= SaveDataAsJson.saveDataAsJson(response);
-                                return Optional.of( new Response(json,"isCodeVerficationValid"));
+                                return Optional.of( new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
                             }
                         }else{
                             ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.FALSE);
                             String json= SaveDataAsJson.saveDataAsJson(response);
-                            return Optional.of(new Response(json,"isCodeVerficationValid"));
+                            return Optional.of(new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
 
                         }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (JsonProcessingException e) {
+                    } catch (SQLException | JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-                    return null;
+                    return Optional.empty();
                 });
-        return resultx;
+        return result;
 
     }
 
@@ -97,6 +92,6 @@ public class RegisterService {
         }};
 
         QueryManager.executeQuery(SQLQuery.REGISTER_TEMPORARY_USER,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("IfUserTempRegister","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 }

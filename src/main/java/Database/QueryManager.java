@@ -5,7 +5,6 @@ import Data.Response;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -56,7 +55,7 @@ public class QueryManager {
         }
 
     }
-    public static Optional<Response> getRSFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func) {
+    public static Optional<Response> getFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func) {
         List returnData=new ArrayList();
         try (Connection connection = connectionDb.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

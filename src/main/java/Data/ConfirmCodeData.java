@@ -14,6 +14,9 @@ public class ConfirmCodeData {
     private Integer idUser;
 
 
+    public ConfirmCodeData(){
+
+    }
 
     public ConfirmCodeData(String confirmCode,Integer idUser) {
         this.confirmCode = confirmCode;

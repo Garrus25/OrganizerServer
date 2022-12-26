@@ -1,21 +1,15 @@
 package Services;
 
 import Data.*;
-import Database.DataBaseConnection;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import responses.ErrorResponse;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 public class LoginService {
@@ -24,7 +18,7 @@ public class LoginService {
 
 
     public Optional<Response> isUserLoginDataValid(LoginAndPassword loginAndPassword){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
                         loginAndPassword.getPassword()}),Arrays.asList(new Class[]{String.class,String.class}),
                 (result)->{
                     try {
@@ -56,7 +50,7 @@ public class LoginService {
 
 
     public Optional<Response> getUserIdFromUserLogin(String loginUser){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
                 (result)->{
                     try {
 
@@ -88,7 +82,7 @@ public class LoginService {
     public Optional<Response> ifUserLoginAvailable(String data) throws SQLException, JsonProcessingException {
 
 
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class),
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class),
                 (result)->{
                     try {
 

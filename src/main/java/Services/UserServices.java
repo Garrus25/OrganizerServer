@@ -1,7 +1,6 @@
 package Services;
 
 import Data.Response;
-import Data.TaskData;
 import Data.UserData;
 import Data.UserID;
 import Database.QueryManager;
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class UserServices {
 
     public Optional<Response> getAllUserData(UserID idGroup){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_ALL_USER_DATA, Arrays.asList(new String[]{idGroup.getUserID()
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_USER_DATA, Arrays.asList(new String[]{idGroup.getUserID()
                 }),Arrays.asList(new Class[]{String.class}),
                 (result)->{
                     List<UserData> groupData=new ArrayList<>();

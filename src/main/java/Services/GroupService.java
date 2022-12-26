@@ -82,7 +82,7 @@ public class GroupService {
     }
 
     public Optional<Response> getMembershipGroup(GroupId idGroup){
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_ALL_MEMBERSHIP_GROUP_ABOUT_ID, Arrays.asList(new Integer[]{idGroup.getGroupId()
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_MEMBERSHIP_GROUP_ABOUT_ID, Arrays.asList(new Integer[]{idGroup.getGroupId()
                         }),Arrays.asList(new Class[]{Integer.class}),
                 (result)->{
                     List<UserData> groupData=new ArrayList<>();
@@ -127,7 +127,7 @@ public class GroupService {
 
 
 
-        Optional<Response> resultx= QueryManager.getRSFromSQL(SQLQuery.GET_ALL_GROUP_DATA, new ArrayList<>(),new ArrayList<>(),
+        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_GROUP_DATA, new ArrayList<>(),new ArrayList<>(),
                 (result)->{
                     List<GroupData> groupData=new ArrayList<>();
                     try {
