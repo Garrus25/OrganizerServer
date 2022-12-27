@@ -17,7 +17,7 @@ public class LoginService {
 
 
 
-    public Optional<Response> isUserLoginDataValid(LoginAndPassword loginAndPassword){
+    public Optional<Response> isUserLoginDataValid(LoginAndPassword loginAndPassword) throws SQLException {
         Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
                         loginAndPassword.getPassword()}),Arrays.asList(new Class[]{String.class,String.class}),
                 (result)->{
@@ -49,7 +49,7 @@ public class LoginService {
     }
 
 
-    public Optional<Response> getUserIdFromUserLogin(String loginUser){
+    public Optional<Response> getUserIdFromUserLogin(String loginUser) throws SQLException {
         Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
                 (result)->{
                     try {

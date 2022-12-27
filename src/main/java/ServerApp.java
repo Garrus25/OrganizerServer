@@ -78,7 +78,16 @@ class ServerApp {
 
         // Czytamy z kanału sc do bufora bb. Zmienna read zawiera
         // liczbę przeczytanych znaków.
-        int read = sc.read(bb);
+        int read = 0;
+        try{
+             read = sc.read(bb);
+        }catch (Exception x){
+            pendingData.remove(sc);
+            sc.close();
+            return;
+        }
+
+
         if (read == -1) {
             // -1 -> EOF. Usuwamy klienta z mapy i zamykamy połączenie.
             pendingData.remove(sc);
@@ -109,14 +118,20 @@ class ServerApp {
             //   String decrypted = encryptor.decrypt(me.getData());
             //    System.out.println(decrypted);
             //     me.setData(decrypted);
+            System.out.println(me.getHeader()+"/"+me.getData());
 
+            if(parser==null){
+                System.out.println("null parser");
+            }
 
             Optional<Response> response = parser.requestParser(me);
-            System.out.println("Odpowiedź " + response.get().getData());
+            String message ="";
+            if(response.isPresent()) {
+                System.out.println("Odpowiedź " + response.get().getData());
 
-           String message = SaveDataAsJson.saveDataAsJson(response.get());
+                 message = SaveDataAsJson.saveDataAsJson(response.get());
 
-
+            }
            while (message.length()<240){
                message=message+" ";
            }

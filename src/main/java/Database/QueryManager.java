@@ -14,6 +14,7 @@ public class QueryManager {
     static {
         try {
             connectionDb= DataBaseConnection.getInstance();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -55,10 +56,13 @@ public class QueryManager {
         }
 
     }
-    public static Optional<Response> getFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func) {
+    public static Optional<Response> getFromSQL(String sql, List<Object> args, List<Class> type, Function<ResultSet,Optional<Response>> func)  {
         List returnData=new ArrayList();
-        try (Connection connection = connectionDb.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        try {
+
+            Connection connection = connectionDb.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < args.size(); ++i) {
                 if (type.get(i).equals(String.class)) {
                     System.out.println("typ string");
@@ -72,10 +76,11 @@ public class QueryManager {
             System.out.println(statement);
 
             ResultSet resultSet = statement.executeQuery();
+
             return func.apply(resultSet);
 
         } catch (Exception x) {
-
+                x.printStackTrace();
         }
         return null;
     }

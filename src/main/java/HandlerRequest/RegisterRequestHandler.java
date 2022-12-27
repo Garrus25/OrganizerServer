@@ -22,7 +22,7 @@ public class RegisterRequestHandler extends RequestService {
 
     public void add_isValidRegisterCode(){
         addRequestHandler((Request request)-> analiseRequest(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), request,(requestArg)->{
-
+            System.out.println("Działam isValidConfirmCode");
             ConfirmCodeData isValidRegisterCodeData = ReadObjectFromJson.read(requestArg.getData(), ConfirmCodeData.class);
             Optional<Response> response = registerService.isRegistrationConfirmCodeValid(isValidRegisterCodeData);
             return response;

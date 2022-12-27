@@ -16,7 +16,7 @@ import java.util.Optional;
 public class RegisterService {
 
     public Response registerUser(UserID idUser){
-        QueryManager.executeQuery(SQLQuery.REGISTER_USER, Collections.singletonList(idUser.getUserID()), Collections.singletonList(String.class));
+        QueryManager.executeQuery(SQLQuery.REGISTER_USER, Collections.singletonList(idUser.getUserID()), Collections.singletonList(Integer.class));
         return CodeResponse.OK.getResponseForCode();
     }
 
@@ -38,26 +38,41 @@ public class RegisterService {
             }
         };
 
+        System.out.println("mam argumenty "+code.getConfirmCode()+" / / "+code.getIdUser());
 
         Optional<Response> result= QueryManager.getFromSQL(SQLQuery.IS_REGISTRATION_CODE_VALID, dataConfirm,typeConfirmData,
                 (resultRows)->{
                     try {
+                        System.out.println("1.");
                         if(resultRows.next()){
+                            System.out.println("next");
                             int isCodeValid= resultRows.getInt(INDEX_COL_FROM_DB_WITH_INFO_ABOUT_CODE_VALID);
+                            System.out.println("Ile "+isCodeValid);
                             if(isCodeValid>NO_DATA_IN_DB_WITH_CODE_QUANTITY){
+                                System.out.println("1.if");
                                 ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.TRUE);
                                 String json= SaveDataAsJson.saveDataAsJson(response);
                                 return Optional.of( new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
+                            }else{
+                                System.out.println("2.if");
+                                ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.FALSE);
+                                String json= SaveDataAsJson.saveDataAsJson(response);
+                                return Optional.of(new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
                             }
                         }else{
-                            ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.FALSE);
-                            String json= SaveDataAsJson.saveDataAsJson(response);
-                            return Optional.of(new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
+                            System.out.println("no next");
+                            //error
+                        //    ConfirmCodeResponse response=new ConfirmCodeResponse(Boolean.FALSE);
+                        //    String json= SaveDataAsJson.saveDataAsJson(response);
+                        //    return Optional.of(new Response(json,RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest()));
 
                         }
+
+                        resultRows.close();
                     } catch (SQLException | JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
+                    System.out.println("Empty");
                     return Optional.empty();
                 });
         return result;

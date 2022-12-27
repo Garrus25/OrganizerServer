@@ -43,6 +43,7 @@ public class Requests {
             Response response= ReadObjectFromJson.read(rawDataRead,Response.class);
          //   readval.get();
            buffer.clear();
+           readval.get();
 
             return Optional.ofNullable(response);
         }

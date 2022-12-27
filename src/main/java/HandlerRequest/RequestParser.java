@@ -50,6 +50,7 @@ public class RequestParser {
     public Optional<Response> requestParser(Request request){
 
         for(Function<Request,Optional<Response>> requestHandler:requestHandlers){
+            System.out.println("xD"+requestHandlers.size());
          Optional<Response> resultRequest=   requestHandler.apply(request);
 
          if(resultRequest.isPresent()){

@@ -19,6 +19,7 @@ public class RegistrationRequestTest {
         RegisterData registerData = new RegisterData(1,"konrad99","asdas","asd@assf","asd","asd","#asd",19,false);
         Request request = new Request(RequestType.REGISTER_USER_TEMPORARY.getNameRequest(), SaveDataAsJson.saveDataAsJson(registerData));
         Optional<Response> response= Requests.make2(request);
+
         Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
 
     }
@@ -38,6 +39,16 @@ public class RegistrationRequestTest {
         ConfirmCodeResponse codeResp=ReadObjectFromJson.read( response.get().getData(),ConfirmCodeResponse.class);
         Assert.assertFalse(codeResp.getCodeValid());
 
+    }
+
+    @Test void check_setUserAccountActive() throws JsonProcessingException {
+        UserID idUser=new UserID("19");
+        Request request=new Request(RequestType.REGISTER_USER.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
+        Optional<Response> response=Requests.make2(request);
+        System.out.println(":"+response.get().getData());
+        System.out.println(response);
+
+        Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
     }
 
 }
