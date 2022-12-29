@@ -1,5 +1,7 @@
 package Data;
 
+import java.util.Objects;
+
 public class UserData {
     private int idUser;
     private String login;
@@ -97,5 +99,18 @@ public class UserData {
 
     public void setIsActive(Integer isActive) {
         this.isActive = isActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserData userData = (UserData) o;
+        return idUser == userData.idUser && Objects.equals(login, userData.login) && Objects.equals(password, userData.password) && Objects.equals(email, userData.email) && Objects.equals(name, userData.name) && Objects.equals(surname, userData.surname) && Objects.equals(color, userData.color) && Objects.equals(authorizeToken, userData.authorizeToken) && Objects.equals(isActive, userData.isActive);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idUser, login, password, email, name, surname, color, authorizeToken, isActive);
     }
 }

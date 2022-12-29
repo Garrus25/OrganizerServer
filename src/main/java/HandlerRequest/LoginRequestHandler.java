@@ -22,7 +22,7 @@ public class LoginRequestHandler extends RequestService {
     }
 
     public void add_isLoginAvailavle() {
-        addRequestHandler((Request request)-> analiseRequest(REQUEST_IF_USER_LOGIN_AVAILABLE,request,(requestParam)->{
+        addRequestHandler((Request request)-> analiseRequest(RequestType.REQUEST_IF_USER_LOGIN_AVAILABLE.getNameRequest(), request,(requestParam)->{
                 LoginData loginData = ReadObjectFromJson.read(requestParam.getData(), LoginData.class);
                 Optional<Response>  response = loginService.ifUserLoginAvailable(loginData.getLogin());
                 return response;
@@ -41,7 +41,7 @@ public class LoginRequestHandler extends RequestService {
 
     public void add_isUserLoginDataValid(){
         addRequestHandler((Request request)-> analiseRequest(REQUEST_USER_LOGIN_DATA_VALID,request,(requestArg)->{
-            LoginAndPassword loginData = ReadObjectFromJson.read(requestArg.getData(), RegisterData.class);
+            LoginAndPassword loginData = ReadObjectFromJson.read(requestArg.getData(), LoginAndPassword.class);
 
            Optional< Response> x=  loginService.isUserLoginDataValid(loginData);
             return x;

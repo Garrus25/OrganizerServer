@@ -31,6 +31,10 @@ public class LoginService {
                                 ValidLoginData x=new ValidLoginData("YES");
                                 String json=SaveDataAsJson.saveDataAsJson(x);
                                 return Optional.of( new Response(json,"getIdUserFromLogin"));
+                            }else{
+                                ValidLoginData x=new ValidLoginData("NO");
+                                String json=SaveDataAsJson.saveDataAsJson(x);
+                                return Optional.of( new Response(json,"getIdUserFromLogin"));
                             }
                         }else{
                             ValidLoginData x=new ValidLoginData("NO");
@@ -43,13 +47,13 @@ public class LoginService {
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-                    return null;
                 });
         return resultx;
     }
 
 
     public Optional<Response> getUserIdFromUserLogin(String loginUser) throws SQLException {
+        System.out.println("..:"+SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN);
         Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
                 (result)->{
                     try {

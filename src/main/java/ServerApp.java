@@ -74,7 +74,7 @@ class ServerApp {
         try{
         // Pobieramy kanał powiązany z zadanym kluczem.
         SocketChannel sc = (SocketChannel) sk.channel();
-        ByteBuffer bb = ByteBuffer.allocate(1200);
+        ByteBuffer bb = ByteBuffer.allocate(4200);
 
         // Czytamy z kanału sc do bufora bb. Zmienna read zawiera
         // liczbę przeczytanych znaków.
@@ -132,14 +132,16 @@ class ServerApp {
                  message = SaveDataAsJson.saveDataAsJson(response.get());
 
             }
-           while (message.length()<240){
+           while (message.length()<540){
                message=message+" ";
            }
+           System.out.println("Mess: "+message);
 
 
 
 
             bb.clear();
+
             bb.put(message.getBytes());
             bb.flip();
          /*   for (int i = 0; i < bb.limit(); i++) {

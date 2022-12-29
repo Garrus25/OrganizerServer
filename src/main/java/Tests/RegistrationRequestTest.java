@@ -43,11 +43,10 @@ public class RegistrationRequestTest {
 
     @Test void check_setUserAccountActive() throws JsonProcessingException {
         UserID idUser=new UserID("19");
-        Request request=new Request(RequestType.REGISTER_USER.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
+        Request request=new Request(RequestType.GET_USER_DATA.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
         Optional<Response> response=Requests.make2(request);
         System.out.println(":"+response.get().getData());
         System.out.println(response);
-
         Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
     }
 

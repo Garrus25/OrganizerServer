@@ -26,6 +26,11 @@ public class Requests {
             result.get();
           //  String str= "Hello! How are you?";
             String str=SaveDataAsJson.saveDataAsJson(request);
+
+
+            for(int i=0;i<300;++i){
+                str+=" ";
+            }
             ByteBuffer buffer = ByteBuffer.wrap(str.getBytes());
             Future<Integer> writeval = client.write(buffer);
             System.out.println("Writing to server: "+str);
@@ -37,6 +42,9 @@ public class Requests {
             System.out.println("Received from server: "
                     +new String(buffer.array()).trim());
 
+
+
+            buffer.flip();
             String rawDataRead=new String(buffer.array()).trim();
 
             System.out.println("Raw:"+rawDataRead);

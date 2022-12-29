@@ -1,9 +1,6 @@
 package HandlerRequest;
 
-import Data.GroupCreationData;
-import Data.Request;
-import Data.Response;
-import Data.UserID;
+import Data.*;
 import JSONUtility.ReadObjectFromJson;
 import Services.UserServices;
 
@@ -15,9 +12,9 @@ public class UserRequestHandler extends RequestService {
 
 
     public void add_getAllDataUser(){
-        addRequestHandler((Request request)-> analiseRequest("getUserData",request,(requestParam)->{
-            UserID loginData = ReadObjectFromJson.read(requestParam.getData(), UserID.class);
-            Optional<Response> response = userServices.getAllUserData(loginData);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.GET_USER_DATA.getNameRequest(), request,(requestParam)->{
+            UserID idUser = ReadObjectFromJson.read(requestParam.getData(), UserID.class);
+            Optional<Response> response = userServices.getAllUserDataFromId(idUser);
             return response;
         }));
     }

@@ -1,5 +1,7 @@
 package Data;
 
+import java.util.Objects;
+
 public class ValidLoginData {
     private String isValidLoginAndPassword;
     public ValidLoginData(){
@@ -16,5 +18,18 @@ public class ValidLoginData {
 
     public void setIsValidLoginAndPassword(String isValidLoginAndPassword) {
         this.isValidLoginAndPassword = isValidLoginAndPassword;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValidLoginData that = (ValidLoginData) o;
+        return Objects.equals(isValidLoginAndPassword, that.isValidLoginAndPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isValidLoginAndPassword);
     }
 }

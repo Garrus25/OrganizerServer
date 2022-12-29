@@ -10,9 +10,6 @@ public class TaskRequestHandler extends RequestService{
 
     private TaskService taskService;
 
-
-
-
     public void add_getAllTaskForGroup() {
         addRequestHandler((Request request)-> analiseRequest("getAllTaskForGroup",request,(requestParam)->{
             GroupId loginData = ReadObjectFromJson.read(requestParam.getData(), GroupId.class);
