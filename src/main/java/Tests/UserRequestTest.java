@@ -19,8 +19,7 @@ public class UserRequestTest {
         Request request=new Request(RequestType.GET_USER_DATA.getNameRequest(), SaveDataAsJson.saveDataAsJson(idUser));
         Optional<Response> response= Requests.make2(request);
         System.out.println(":"+response.get().getData());
-        
-        Integer idUserData= 19;
+        Integer idUserData= 1;
         String login= "konrad99";
         String password= "asdas";
         String email= "asd@assf";

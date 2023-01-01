@@ -8,10 +8,24 @@ public enum RequestType {
 
     GET_USER_DATA("getUserData"),
 
-    REQUEST_IF_USER_LOGIN_AVAILABLE("ifUserLoginAvailable"),
-    REQUEST_GET_USER_ID_FROM_LOGIN("getIdUserFromLogin"),
+    IF_USER_LOGIN_AVAILABLE("ifUserLoginAvailable"),
+    GET_USER_ID_FROM_LOGIN("getIdUserFromLogin"),
 
-    REQUEST_USER_LOGIN_DATA_VALID("isLoginDataValid");
+    USER_LOGIN_DATA_VALID("isLoginDataValid"),
+
+    GET_ALL_TASK_FOR_GROUP("getAllTaskForGroup"),
+
+    GET_ALL_TASK_FOR_USER("getAllTaskForUSer"),
+
+    ADD_NEW_TASK("addNewTask"),
+
+    ADD_TASK_TO_USER("addTaskToUSer"),
+
+    ADD_TASK_TO_GROUP("addTaskToGroup"),
+
+    UPDATE_TASK("updateTask");
+
+
 
     public String getNameRequest() {
         return nameRequest;

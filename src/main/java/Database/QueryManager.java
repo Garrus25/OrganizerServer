@@ -22,10 +22,12 @@ public class QueryManager {
 
 
 
-    public static void executeQuery(String sql, List<Object> args, List<Class> type) {
+    public static void executeQuery(String sql, List<Object> args, List<Class> type)   {
         System.out.println("execute "+sql);
-        try (Connection connection = connectionDb.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        Connection connection = connectionDb.getConnection();
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < args.size(); ++i) {
                 System.out.println("i"+i);
 
@@ -41,6 +43,8 @@ public class QueryManager {
                     System.out.println("typ bool");
                     System.out.println((Boolean) args.get(i));
                     statement.setBoolean(i+1,(Boolean) args.get(i));
+                }else{
+                    statement.setTimestamp(i+1,(Timestamp) args.get(i));
                 }
             }
 
@@ -48,11 +52,12 @@ public class QueryManager {
             System.out.println(statement);
           //  statement.executeQuery();
             statement.execute();
-            connection.commit();
+
+
 
 
         } catch (Exception x) {
-
+            x.printStackTrace();
         }
 
     }
@@ -62,6 +67,7 @@ public class QueryManager {
         try {
 
             Connection connection = connectionDb.getConnection();
+
             PreparedStatement statement = connection.prepareStatement(sql);
             for (int i = 0; i < args.size(); ++i) {
                 if (type.get(i).equals(String.class)) {
@@ -69,6 +75,8 @@ public class QueryManager {
                     statement.setString(i+1, ((String) args.get(i)));
                 } else if (type.get(i).equals(Integer.class)) {
                     statement.setInt(i+1, (Integer) args.get(i));
+                }else{
+                    statement.setTimestamp(i+1,(Timestamp) args.get(i));
                 }
             }
 

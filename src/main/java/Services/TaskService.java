@@ -3,10 +3,14 @@ package Services;
 import Data.*;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
+import JSONUtility.CodeResponse;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +23,7 @@ public class TaskService {
 
     public Optional<Response> getAllTaskForGroup(GroupId idGroup){
         Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_GROUP, Arrays.asList(new Integer[]{idGroup.getGroupId()
-                }),Arrays.asList(new Class[]{Integer.class}),
+                }), Arrays.asList(new Class[]{Integer.class}),
                 (result)->{
                     List<TaskData> groupData=new ArrayList<>();
                     try {
@@ -31,10 +35,9 @@ public class TaskService {
                             Integer idTask= result.getInt(1);
                             String name= result.getString(2);
                             String description= result.getString(3);
-                            String createDate= result.getString(4);
-                            String dateNotification= result.getString(5);
-
-                            groupData.add(new TaskData(idTask,name,description,createDate,dateNotification));
+                            Timestamp date = result.getTimestamp(4);
+                            Timestamp date2 = result.getTimestamp(5);
+                            groupData.add(new TaskData(idTask,name,description,date,date2));
 
                         }
                     } catch (SQLException e) {
@@ -88,7 +91,7 @@ public class TaskService {
     public Optional<Response> addTaskToUser(AddTaskToUser registerData) {
         List<Object> dataRegister=new ArrayList<Object>(){
             {
-                add(registerData.getIdUSer());
+                add(registerData.getIdUser());
                 add(registerData.getIdTask());
                 add(registerData.getIsDisplay());
 
@@ -106,7 +109,7 @@ public class TaskService {
         }};
 
         QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_USER,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("addtaskToGroup","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
 
@@ -153,14 +156,14 @@ public class TaskService {
 
             add(String.class);
             add(String.class);
-            add(String.class);
-            add(String.class);
+            add(Timestamp.class);
+            add(Timestamp.class);
 
 
         }};
 
         QueryManager.executeQuery(SQLQuery.ADD_TASK,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("addTask","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
     public Optional<Response> getAllTaskForUser(UserID idGroup){
         Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
@@ -176,8 +179,8 @@ public class TaskService {
                             Integer idTask= result.getInt(1);
                             String name= result.getString(2);
                             String description= result.getString(3);
-                            String createDate= result.getString(4);
-                            String dateNotification= result.getString(5);
+                            Timestamp createDate= result.getTimestamp(4);
+                            Timestamp dateNotification= result.getTimestamp(5);
 
                             groupData.add(new TaskData(idTask,name,description,createDate,dateNotification));
 

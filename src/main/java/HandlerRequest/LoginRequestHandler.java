@@ -3,8 +3,7 @@ package HandlerRequest;
 import Data.*;
 import JSONUtility.ReadObjectFromJson;
 import Services.LoginService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ public class LoginRequestHandler extends RequestService {
     }
 
     public void add_isLoginAvailavle() {
-        addRequestHandler((Request request)-> analiseRequest(RequestType.REQUEST_IF_USER_LOGIN_AVAILABLE.getNameRequest(), request,(requestParam)->{
+        addRequestHandler((Request request)-> analiseRequest(RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest(), request,(requestParam)->{
                 LoginData loginData = ReadObjectFromJson.read(requestParam.getData(), LoginData.class);
                 Optional<Response>  response = loginService.ifUserLoginAvailable(loginData.getLogin());
                 return response;

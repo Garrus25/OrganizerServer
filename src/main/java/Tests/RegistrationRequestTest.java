@@ -33,7 +33,7 @@ public class RegistrationRequestTest {
     }
 
     @Test void checkIsCodeVerficationValid_NoValid() throws JsonProcessingException {
-        ConfirmCodeData confirmCodeDataValid=new ConfirmCodeData("32434",19);
+        ConfirmCodeData confirmCodeDataValid=new ConfirmCodeData("32434",1);
         Request request=new Request(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), SaveDataAsJson.saveDataAsJson(confirmCodeDataValid));
         Optional<Response> response=Requests.make2(request);
         ConfirmCodeResponse codeResp=ReadObjectFromJson.read( response.get().getData(),ConfirmCodeResponse.class);
@@ -42,8 +42,8 @@ public class RegistrationRequestTest {
     }
 
     @Test void check_setUserAccountActive() throws JsonProcessingException {
-        UserID idUser=new UserID("19");
-        Request request=new Request(RequestType.GET_USER_DATA.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
+        UserID idUser=new UserID("1");
+        Request request=new Request(RequestType.REGISTER_USER.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
         Optional<Response> response=Requests.make2(request);
         System.out.println(":"+response.get().getData());
         System.out.println(response);

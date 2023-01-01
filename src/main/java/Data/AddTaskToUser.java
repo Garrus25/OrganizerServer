@@ -1,24 +1,24 @@
 package Data;
 
 public class AddTaskToUser {
-    private Integer idUSer;
+    private Integer idUser;
     private Integer idTask;
     private Integer isDisplay;
 
     public AddTaskToUser(){};
 
     public AddTaskToUser(Integer idUSer, Integer idTask, Integer isDisplay) {
-        this.idUSer = idUSer;
+        this.idUser = idUSer;
         this.idTask = idTask;
         this.isDisplay = isDisplay;
     }
 
-    public Integer getIdUSer() {
-        return idUSer;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setIdUSer(Integer idUSer) {
-        this.idUSer = idUSer;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 
     public Integer getIdTask() {
