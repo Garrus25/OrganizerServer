@@ -11,27 +11,23 @@ public class LoginRequestHandler extends RequestService {
 
     private LoginService loginService;
 
-    private String REQUEST_IF_USER_LOGIN_AVAILABLE="ifUserLoginAvailable";
-    private String REQUEST_GET_USER_ID_FROM_LOGIN="getIdUserFromLogin";
-
-    private String REQUEST_USER_LOGIN_DATA_VALID="isLoginDataValid";
     public LoginRequestHandler() throws SQLException {
         this.loginService=new LoginService();
         registerHandlersForClass();
     }
 
-    public void add_isLoginAvailavle() {
+    public void add_isLoginAvailable() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest(), request,(requestParam)->{
-                LoginData loginData = ReadObjectFromJson.read(requestParam.getData(), LoginData.class);
-                Optional<Response>  response = loginService.ifUserLoginAvailable(loginData.getLogin());
+                LoginData loginDataRequestParam = ReadObjectFromJson.read(requestParam.getData(), LoginData.class);
+                Optional<Response>  response = loginService.ifUserLoginAvailable(loginDataRequestParam.getLogin());
                 return response;
         }));
     }
 
     public void add_getIdUserFromLogin(){
-        addRequestHandler((Request request)->analiseRequest(REQUEST_GET_USER_ID_FROM_LOGIN,request,(requestParam)->{
-            UserLogin loginData=ReadObjectFromJson.read(requestParam.getData(),UserLogin.class);
-            Optional<Response> response =loginService.getUserIdFromUserLogin(loginData.getUserLogin());
+        addRequestHandler((Request request)->analiseRequest(RequestType.GET_USER_ID_FROM_LOGIN.getNameRequest(), request,(requestParam)->{
+            UserLogin loginDataRequestParam = ReadObjectFromJson.read(requestParam.getData(),UserLogin.class);
+            Optional<Response> response = loginService.getUserIdFromUserLogin(loginDataRequestParam.getUserLogin());
             return response;
 
         }));
@@ -39,19 +35,17 @@ public class LoginRequestHandler extends RequestService {
 
 
     public void add_isUserLoginDataValid(){
-        addRequestHandler((Request request)-> analiseRequest(REQUEST_USER_LOGIN_DATA_VALID,request,(requestArg)->{
-            LoginAndPassword loginData = ReadObjectFromJson.read(requestArg.getData(), LoginAndPassword.class);
-
-           Optional< Response> x=  loginService.isUserLoginDataValid(loginData);
-            return x;
+        addRequestHandler((Request request)-> analiseRequest(RequestType.USER_LOGIN_DATA_VALID.getNameRequest(), request,(requestArg)->{
+            LoginAndPassword loginAndPasswordRequestParam = ReadObjectFromJson.read(requestArg.getData(), LoginAndPassword.class);
+            Optional< Response> response =  loginService.isUserLoginDataValid(loginAndPasswordRequestParam);
+            return response;
         }));
     }
-    //isUserLoginDataValid
 
 
     @Override
     public void registerHandlersForClass() {
-        add_isLoginAvailavle();
+        add_isLoginAvailable();
         add_getIdUserFromLogin();
         add_isUserLoginDataValid();
 

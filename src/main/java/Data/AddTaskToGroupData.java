@@ -1,7 +1,7 @@
 package Data;
 
 public class AddTaskToGroupData {
-    private Integer idtask;
+    private Integer idTask;
     private Integer idGroup;
 
     public Integer getIdUser() {
@@ -16,17 +16,17 @@ public class AddTaskToGroupData {
 
     public AddTaskToGroupData(){}
     public AddTaskToGroupData(Integer idtask, Integer idGroup,Integer idUser) {
-        this.idtask = idtask;
+        this.idTask = idtask;
         this.idGroup = idGroup;
         this.idUser=idUser;
     }
 
-    public Integer getIdtask() {
-        return idtask;
+    public Integer getIdTask() {
+        return idTask;
     }
 
-    public void setIdtask(Integer idtask) {
-        this.idtask = idtask;
+    public void setIdTask(Integer idTask) {
+        this.idTask = idTask;
     }
 
     public Integer getIdGroup() {

@@ -8,29 +8,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.Future;
 
 class ServerApp {
 
-    // Z każdym klientem powiążemy kolejkę oczekujących na wysłanie buforów.
+    // Z każdym klientem wiążemy kolejkę oczekujących na wysłanie buforów
     private final Map<SocketChannel, Queue<ByteBuffer>> pendingData = new HashMap<>();
 
     private ServerSocketChannel ssc;
     private Selector selector;
+    private static final int BUFFER_CAPACITY_IN_BYTES = 4200;
+    private static final Integer PORT_NUMBER = 2137;
+
+
 
     public void start() throws IOException, SQLException {
         selector = Selector.open();
 
         ssc = ServerSocketChannel.open();
-        ssc.bind(new InetSocketAddress(2137));
+        ssc.bind(new InetSocketAddress(PORT_NUMBER));
         ssc.configureBlocking(false);
 
-        // Chcemy być informowani o gotowości do akceptacji nowego połączenia.
+        // Rejstujemy powiadomienie o nowym połączeniu
         ssc.register(selector, SelectionKey.OP_ACCEPT);
 
         while (true) {
@@ -40,17 +42,17 @@ class ServerApp {
             for (Iterator<SelectionKey> it = keys.iterator(); it.hasNext(); ) {
 
                 SelectionKey sk = it.next();
-                // Należy pamiętać o usuwaniu przetworzonych kluczy!
+                // usuwam przetworzone klucze
                 it.remove();
 
                 if (sk.isValid() && sk.isAcceptable()) {
-                    // Nowy klient czeka na akceptację.
+                    // akceptujemy nowego klienta
                     handleAccept();
                 } else if (sk.isValid() && sk.isReadable()) {
-                    // Możemy wykonać nieblokującą operację READ na kliencie.
+                    // nieblokujące czytanie klienta
                     handleRead(sk);
                 } else if (sk.isValid() && sk.isWritable()) {
-                    // Możemy wykonać nieblokującą operację WRITE na kliencie.
+                    // nieblokujący write do klienta
                     handleWrite(sk);
                 }
             }
@@ -62,22 +64,19 @@ class ServerApp {
 
         if (sc != null) {
             sc.configureBlocking(false);
-            // Chcemy być informowani o możliwości wykonania nieblokującej
-            // operacji READ na kliencie.
+            //rejestruje dostęp do informacji o nieblokującym odczycie
             sc.register(selector, SelectionKey.OP_READ);
-
             pendingData.put(sc, new LinkedList<ByteBuffer>());
         }
     }
 
     private void handleRead(SelectionKey sk) throws IOException, SQLException {
         try{
-        // Pobieramy kanał powiązany z zadanym kluczem.
+        // pobieram kanał klienta
         SocketChannel sc = (SocketChannel) sk.channel();
-        ByteBuffer bb = ByteBuffer.allocate(4200);
+        ByteBuffer bb = ByteBuffer.allocate(BUFFER_CAPACITY_IN_BYTES);
 
-        // Czytamy z kanału sc do bufora bb. Zmienna read zawiera
-        // liczbę przeczytanych znaków.
+        // czytam z kanału do bufora
         int read = 0;
         try{
              read = sc.read(bb);
@@ -89,45 +88,26 @@ class ServerApp {
 
 
         if (read == -1) {
-            // -1 -> EOF. Usuwamy klienta z mapy i zamykamy połączenie.
+            // -1 -> EOF koniec komunikacji usuwam klienta z mapy
             pendingData.remove(sc);
             sc.close();
         } else if (read > 0) {
-            // Aktualizujemy pozycję i limit w buforze, a także podmieniamy jego
-            // zawartość na wersję UPPERCASE.
+
             bb.flip();
-
-
-
-
-
-
-
-
-
-
 
             RequestParser parser = new RequestParser();
             ObjectMapper mapper = new ObjectMapper();
 
-            //  String textPurpose=mapper.readValue( "{\"idUser\":1,\"login\":\"konrad\",\"password\":\"testowe\",\"name\":\"Konrad\",\"surname\":\"Ktoś\",\"color\":\"#121212\",\"authorizeToken\":1922,\"email\":\"email@mail\",\"active\":false}",String.class);
-            //   System.out.println(":D "+textPurpose);
             mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
             Request me = mapper.readValue((new String(bb.array()).trim()), Request.class);
 
-            //   String decrypted = encryptor.decrypt(me.getData());
-            //    System.out.println(decrypted);
-            //     me.setData(decrypted);
-            System.out.println(me.getHeader()+"/"+me.getData());
 
-            if(parser==null){
-                System.out.println("null parser");
-            }
+
 
             Optional<Response> response = parser.requestParser(me);
             String message ="";
             if(response.isPresent()) {
-                System.out.println("Odpowiedź " + response.get().getData());
+
 
                  message = SaveDataAsJson.saveDataAsJson(response.get());
 
@@ -135,7 +115,7 @@ class ServerApp {
            while (message.length()<540){
                message=message+" ";
            }
-           System.out.println("Mess: "+message);
+
 
 
 
@@ -144,19 +124,14 @@ class ServerApp {
 
             bb.put(message.getBytes());
             bb.flip();
-         /*   for (int i = 0; i < bb.limit(); i++) {
-                bb.put(i, (byte) Character.toUpperCase((char) bb.get(i)));
 
-            }*/
 
             System.out.println("Received from client: "
                     + new String(bb.array()).trim());
 
-            // Przetworzony bufor zostaje dodany do kolejki klienta.
+            // Dodaje odpowiedz do kolejki klienta
             pendingData.get(sc).add(bb);
-            // Po odczytaniu danych chcemy wysłać przetworzone wejście z powrotem
-            // do klienta, więc od teraz interesuje nas, kiedy można wykonać na nim
-            // nieblokującą operację WRITE.
+            // Wysyłam dane do klienta kiedy będe mógł nieblokująco wykonać write
             sk.interestOps(SelectionKey.OP_WRITE);
 
 
@@ -172,23 +147,19 @@ class ServerApp {
         while (!queue.isEmpty()) {
             ByteBuffer bb = queue.peek();
 
-            // Piszemy do kanału sc z bufora bb. Zmienna write zawiera 
-            // liczbę wysłanych znaków.
+            // piszę do kanału bufora
 
-            int write = sc.write(bb);//    ByteBuffer.wrap(str.getBytes())
+            int write = sc.write(bb);
             if (write == -1) {
                 pendingData.remove(sc);
                 sc.close();
                 return;
             } else if (bb.hasRemaining()) {
-                // Nie udało się wysłać całej zawartości bufora. Oznacza to, że w trakcie
-                // wykonywania operacji write przestało być możliwe nieblokujące
-                // wysyłanie danych. Opuszczamy metodę - reszta bufora zostanie wysłana
-                // przy następnej okazji.
+                //Nie można wysłać całego bufora nieblokująco czekam na możłiwość wysyłki reszty
                 return;
             }
 
-            // Wysłaliśmy cały bufor. Usuwamy go z kolejki.
+            // wysłano cały bufor usuwanie z kolejki
             queue.remove();
         }
 

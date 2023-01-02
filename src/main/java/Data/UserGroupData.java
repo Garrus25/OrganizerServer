@@ -1,14 +1,14 @@
 package Data;
 
-public class AddUserToGroupData {
+public class UserGroupData {
     private int idUser;
     private int idGroup;
 
-    public AddUserToGroupData(){
+    public UserGroupData(){
 
     }
 
-    public AddUserToGroupData(int idUser, int idGroup) {
+    public UserGroupData(int idUser, int idGroup) {
         this.idUser = idUser;
         this.idGroup = idGroup;
     }

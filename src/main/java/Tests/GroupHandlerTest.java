@@ -5,7 +5,6 @@ import JSONUtility.CodeResponse;
 import JSONUtility.ReadObjectFromJson;
 import JSONUtility.SaveDataAsJson;
 import Tests.UtilityTest.Requests;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,7 +24,7 @@ public class GroupHandlerTest {
     }
 
     @Test void addUserToGroup() throws JsonProcessingException {
-        AddUserToGroupData groupData=new AddUserToGroupData(1,1);
+        UserGroupData groupData=new UserGroupData(1,1);
         Request request=new Request(RequestType.ADD_USER_TO_GROUP.getNameRequest(), SaveDataAsJson.saveDataAsJson(groupData));
         Optional<Response> response= Requests.make2(request);
         Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
@@ -56,7 +55,7 @@ public class GroupHandlerTest {
     }
 
     @Test void removeUserFromGroup() throws JsonProcessingException {
-        AddUserToGroupData groupData=new AddUserToGroupData(1,1);
+        UserGroupData groupData=new UserGroupData(1,1);
         Request request=new Request(RequestType.REMOVE_USER_FROM_GROUP.getNameRequest(), SaveDataAsJson.saveDataAsJson(groupData));
         Optional<Response> response= Requests.make2(request);
         Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());

@@ -17,7 +17,7 @@ public class GroupService {
 
 
 
-    public Optional<Response> addUserToGroup(AddUserToGroupData groupData){
+    public Optional<Response> addUserToGroup(UserGroupData groupData){
         List<Object> dataRegister=new ArrayList<Object>(){
             {
                 add(groupData.getIdUser());
@@ -61,7 +61,7 @@ public class GroupService {
     }
 
 
-    public Optional<Response> removeUserFromGroup(AddUserToGroupData data){
+    public Optional<Response> removeUserFromGroup(UserGroupData data){
         List<Object> dataRegister=new ArrayList<Object>(){
             {
                 add(data.getIdUser());
