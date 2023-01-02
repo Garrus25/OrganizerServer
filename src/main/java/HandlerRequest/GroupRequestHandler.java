@@ -21,7 +21,7 @@ public class GroupRequestHandler extends RequestService {
     //getMembershipGroupAboutId
 
     public void add_getMembershipGroupAboutId() {
-        addRequestHandler((Request request)-> analiseRequest("getMembershipGroupAboutId",request,(requestParam)->{
+        addRequestHandler((Request request)-> analiseRequest(RequestType.GET_MEMBERSHIP_GROUP_ABOUT_UD.getNameRequest(), request,(requestParam)->{
             GroupId loginData = ReadObjectFromJson.read(requestParam.getData(), GroupId.class);
             Optional<Response>  response = ser.getMembershipGroup(loginData);
             return response;
@@ -29,7 +29,7 @@ public class GroupRequestHandler extends RequestService {
     }
 
       public void add_getAllGroup() {
-              addRequestHandler((Request request)-> analiseRequest("getAllDataGroup",request,(requestParam)->{
+              addRequestHandler((Request request)-> analiseRequest(RequestType.GET_ALL_GROUP_DATA.getNameRequest(), request,(requestParam)->{
               Optional<Response> response = ser.getAllDataGroup();
               return response;
           }));
@@ -37,7 +37,7 @@ public class GroupRequestHandler extends RequestService {
 
 
       public void add_createGroup(){
-          addRequestHandler((Request request)-> analiseRequest("createGroup",request,(requestParam)->{
+          addRequestHandler((Request request)-> analiseRequest(RequestType.CREATE_GROUP.getNameRequest(),request,(requestParam)->{
               GroupCreationData loginData = ReadObjectFromJson.read(requestParam.getData(), GroupCreationData.class);
               Optional<Response> response = ser.createGroup(loginData);
               return response;
@@ -46,8 +46,8 @@ public class GroupRequestHandler extends RequestService {
 
 
     public void add_addUserToGroup(){
-        addRequestHandler((Request request)-> analiseRequest("adduserToGroup",request,(requestParam)->{
-            AddUserToGroupData loginData = ReadObjectFromJson.read(requestParam.getData(), GroupCreationData.class);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.ADD_USER_TO_GROUP.getNameRequest(), request,(requestParam)->{
+            AddUserToGroupData loginData = ReadObjectFromJson.read(requestParam.getData(), AddUserToGroupData.class);
             Optional<Response> response = ser.addUserToGroup(loginData);
             return response;
         }));
@@ -55,8 +55,8 @@ public class GroupRequestHandler extends RequestService {
 
 
     public void add_removeUserFromGroup(){
-        addRequestHandler((Request request)-> analiseRequest("removeUserFromGroup",request,(requestParam)->{
-            AddUserToGroupData loginData = ReadObjectFromJson.read(requestParam.getData(), GroupCreationData.class);
+        addRequestHandler((Request request)-> analiseRequest(RequestType.REMOVE_USER_FROM_GROUP.getNameRequest(), request,(requestParam)->{
+            AddUserToGroupData loginData = ReadObjectFromJson.read(requestParam.getData(), AddUserToGroupData.class);
             Optional<Response> response = ser.removeUserFromGroup(loginData);
             return response;
         }));

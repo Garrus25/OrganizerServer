@@ -66,7 +66,7 @@ public class TaskService {
     public Optional<Response> addTaskToGroup(AddTaskToGroupData registerData) {
         List<Object> dataRegister=new ArrayList<Object>(){
             {
-                add(registerData.getIdtask());
+
                 add(registerData.getIdUser());
                 add(registerData.getIdGroup());
 
@@ -76,7 +76,7 @@ public class TaskService {
         List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
 
 
-            add(Integer.class);
+
             add(Integer.class);
             add(Integer.class);
 
@@ -84,7 +84,7 @@ public class TaskService {
         }};
 
         QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_GROUP,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("addtaskToGroup","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
 
@@ -129,15 +129,15 @@ public class TaskService {
 
             add(String.class);
             add(String.class);
-            add(String.class);
-            add(String.class);
+            add(Timestamp.class);
+            add(Timestamp.class);
             add(Integer.class);
 
 
         }};
 
         QueryManager.executeQuery(SQLQuery.EDIT_TASK,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("updateTeask","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
     public Optional<Response> addTask(TaskData registerData) {

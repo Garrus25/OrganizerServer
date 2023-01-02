@@ -59,6 +59,53 @@ public class TaskRequestTest {
         Assert.assertEquals(result,listTask);
 
 
+    }
+
+
+
+
+
+
+
+    @Test void addTaskToGroup() throws JsonProcessingException{
+        AddTaskToGroupData addTaskToUser=new AddTaskToGroupData(1,1,1);
+        Request request=new Request(RequestType.ADD_TASK_TO_GROUP.getNameRequest(), SaveDataAsJson.saveDataAsJson(addTaskToUser));
+        Optional<Response> response= Requests.make2(request);
+        Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
+    }
+
+
+    @Test void updateTask() throws JsonProcessingException{
+        java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+        TaskData addTaskToUser=new TaskData(1,"Zrobić bałagan","Coś zrobić",date,date);
+        Request request=new Request(RequestType.UPDATE_TASK.getNameRequest(), SaveDataAsJson.saveDataAsJson(addTaskToUser));
+        Optional<Response> response= Requests.make2(request);
+        Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
+    }
+
+
+    @Test void getAllTaskForGroup() throws JsonProcessingException {
+        GroupId idUser=new GroupId(1);
+        java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+
+        Request request=new Request(RequestType.GET_ALL_TASK_FOR_GROUP.getNameRequest(), SaveDataAsJson.saveDataAsJson(idUser));
+        Optional<Response> response= Requests.make2(request);
+        List<TaskData> listTask=new ArrayList<>();
+        TaskData taskDataMock=new TaskData(1,"Zrobić","Coś zrobić",date,date);
+
+        listTask.add(taskDataMock);
+
+
+        List<TaskData> result= ReadObjectFromJson.<TaskData>readListObject(response.get().getData(),TaskData.class);
+
+        for(TaskData x:result){
+            System.out.println(x);
+        }
+
+        Assert.assertEquals(result,listTask);
+
 
     }
+
+
 }

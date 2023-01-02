@@ -1,5 +1,7 @@
 package Data;
 
+import java.util.Objects;
+
 public class GroupData {
     private int idGroup;
     private String nameGroup;
@@ -36,5 +38,18 @@ public class GroupData {
 
     public void setGroupCode(String groupCode) {
         this.groupCode = groupCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroupData groupData = (GroupData) o;
+        return idGroup == groupData.idGroup && Objects.equals(nameGroup, groupData.nameGroup) && Objects.equals(groupCode, groupData.groupCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idGroup, nameGroup, groupCode);
     }
 }

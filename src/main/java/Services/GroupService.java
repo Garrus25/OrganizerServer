@@ -3,6 +3,7 @@ package Services;
 import Data.*;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
+import JSONUtility.CodeResponse;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -34,7 +35,7 @@ public class GroupService {
         }};
 
         QueryManager.executeQuery(SQLQuery.ADD_USER_TO_GROUP,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("adduserToGroup","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
 
     }
 
@@ -52,11 +53,10 @@ public class GroupService {
             add(String.class);
             add(String.class);
 
-
         }};
 
         QueryManager.executeQuery(SQLQuery.CREATE_GROUP,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("createGroup","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
 
     }
 
@@ -78,7 +78,7 @@ public class GroupService {
 
         }};
         QueryManager.executeQuery(SQLQuery.REMOVE_USER_FROM_GROUP,dataRegister,dataRegisterColumnType);
-        return Optional.of(new Response("createGroup","{Register:YES}"));
+        return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
     public Optional<Response> getMembershipGroup(GroupId idGroup){

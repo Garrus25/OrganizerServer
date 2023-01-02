@@ -23,7 +23,19 @@ public enum RequestType {
 
     ADD_TASK_TO_GROUP("addTaskToGroup"),
 
-    UPDATE_TASK("updateTask");
+    UPDATE_TASK("updateTask"),
+
+    CREATE_GROUP("createGroup"),
+
+    GET_MEMBERSHIP_GROUP_ABOUT_UD("getMembershipGroupAboutId"),
+
+    GET_ALL_GROUP_DATA("getAllDataGroup"),
+
+    ADD_USER_TO_GROUP("adduserToGroup"),
+
+    REMOVE_USER_FROM_GROUP("removeUserFromGroup");
+
+
 
 
 
