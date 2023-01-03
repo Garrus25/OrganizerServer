@@ -1,15 +1,14 @@
 package Data;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 public class TaskData {
     private Integer idTask;
     private String name;
-    private String descsription;
+    private String description;
     private Timestamp createDate;
-    private Timestamp dateOfNotifivation;
+    private Timestamp dateOfNotification;
 
 
     public TaskData(){
@@ -19,9 +18,9 @@ public class TaskData {
     public TaskData(Integer idTask, String name, String descsription, Timestamp createDate, Timestamp dateOfNotifivation) {
         this.idTask = idTask;
         this.name = name;
-        this.descsription = descsription;
+        this.description = descsription;
         this.createDate = createDate;
-        this.dateOfNotifivation = dateOfNotifivation;
+        this.dateOfNotification = dateOfNotifivation;
     }
 
     public Integer getIdTask() {
@@ -40,12 +39,12 @@ public class TaskData {
         this.name = name;
     }
 
-    public String getDescsription() {
-        return descsription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescsription(String descsription) {
-        this.descsription = descsription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Timestamp getCreateDate() {
@@ -56,12 +55,12 @@ public class TaskData {
         this.createDate = createDate;
     }
 
-    public Timestamp getDateOfNotifivation() {
-        return dateOfNotifivation;
+    public Timestamp getDateOfNotification() {
+        return dateOfNotification;
     }
 
-    public void setDateOfNotifivation(Timestamp dateOfNotifivation) {
-        this.dateOfNotifivation = dateOfNotifivation;
+    public void setDateOfNotification(Timestamp dateOfNotification) {
+        this.dateOfNotification = dateOfNotification;
     }
 
     @Override
@@ -69,9 +68,9 @@ public class TaskData {
         return "TaskData{" +
                 "idTask=" + idTask +
                 ", name='" + name + '\'' +
-                ", descsription='" + descsription + '\'' +
+                ", descsription='" + description + '\'' +
                 ", createDate=" + createDate +
-                ", dateOfNotifivation=" + dateOfNotifivation +
+                ", dateOfNotifivation=" + dateOfNotification +
                 '}';
     }
 
@@ -80,11 +79,11 @@ public class TaskData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaskData taskData = (TaskData) o;
-        return Objects.equals(idTask, taskData.idTask) && Objects.equals(name, taskData.name) && Objects.equals(descsription, taskData.descsription);
+        return Objects.equals(idTask, taskData.idTask) && Objects.equals(name, taskData.name) && Objects.equals(description, taskData.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTask, name, descsription);
+        return Objects.hash(idTask, name, description);
     }
 }

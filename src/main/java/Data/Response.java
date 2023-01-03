@@ -10,30 +10,30 @@ public class Response {
     private String data;
     private String header;
 
+    private static final String ENCRYPTION_PASSWORD="xD";
+
 
     public Response(){
 
     }
     public Response(String data, String header) {
         StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-        decryptor.setPassword("xD");
+        decryptor.setPassword(ENCRYPTION_PASSWORD);
         this.data= decryptor.encrypt(data);
         this.header = header;
     }
 
     public String getData() {
         StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-        decryptor.setPassword("xD");
-     //   this.data= decryptor.decrypt(data);
+        decryptor.setPassword(ENCRYPTION_PASSWORD);
        return decryptor.decrypt(data);
     }
 
     public void setData(String data) {
-
         StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-        decryptor.setPassword("xD");
+        decryptor.setPassword(ENCRYPTION_PASSWORD);
         this.data= decryptor.encrypt(data);
-     //  this.data = encrypted;
+
     }
 
     public String getHeader() {

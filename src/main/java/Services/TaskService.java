@@ -8,9 +8,7 @@ import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,21 +20,18 @@ public class TaskService {
 
 
     public Optional<Response> getAllTaskForGroup(GroupId idGroup){
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_GROUP, Arrays.asList(new Integer[]{idGroup.getGroupId()
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_GROUP, Arrays.asList(new Integer[]{idGroup.getGroupId()
                 }), Arrays.asList(new Class[]{Integer.class}),
-                (result)->{
+                (resultArg)->{
                     List<TaskData> groupData=new ArrayList<>();
                     try {
 
-                        if(result.next()){
-
-
-                            // TASK.ID_TASK,TASK.NAME,TASK.DESCRIPTION,TASK.CREATE_DATE,TASK.DATE_OF_NOTIFICATION
-                            Integer idTask= result.getInt(1);
-                            String name= result.getString(2);
-                            String description= result.getString(3);
-                            Timestamp date = result.getTimestamp(4);
-                            Timestamp date2 = result.getTimestamp(5);
+                        if(resultArg.next()){
+                            Integer idTask= resultArg.getInt(1);
+                            String name= resultArg.getString(2);
+                            String description= resultArg.getString(3);
+                            Timestamp date = resultArg.getTimestamp(4);
+                            Timestamp date2 = resultArg.getTimestamp(5);
                             groupData.add(new TaskData(idTask,name,description,date,date2));
 
                         }
@@ -44,52 +39,43 @@ public class TaskService {
                         throw new RuntimeException(e);
                     }
 
-
                     String json= null;
                     try {
-                        json = SaveDataAsJson.saveDataAsJson(groupData);
-                        return Optional.of(new Response(json,"getMembershipGroupAboutId"));
+                        json = SaveDataAsJson.save(groupData);
+                        return Optional.of(new Response(json,RequestType.GET_ALL_TASK_FOR_GROUP.getNameRequest()));
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
 
-
-
                 });
 
-        return  resultx;
+        return  result;
     }
 
 
 
 
     public Optional<Response> addTaskToGroup(AddTaskToGroupData registerData) {
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> dataAddTaskToGroup=new ArrayList<Object>(){
             {
-
                 add(registerData.getIdUser());
                 add(registerData.getIdGroup());
-
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
-
-
+        List<Class> typeDataAddTaskToGroup=new ArrayList<Class>(){{
             add(Integer.class);
             add(Integer.class);
-
 
         }};
 
-        QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_GROUP,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_GROUP,dataAddTaskToGroup,typeDataAddTaskToGroup);
         return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
 
     public Optional<Response> addTaskToUser(AddTaskToUser registerData) {
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> addTaskToUserData=new ArrayList<Object>(){
             {
                 add(registerData.getIdUser());
                 add(registerData.getIdTask());
@@ -98,90 +84,75 @@ public class TaskService {
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
-
+        List<Class> typeAddTaskToUserData=new ArrayList<Class>(){{
             add(Integer.class);
             add(Integer.class);
             add(Integer.class);
-
 
         }};
 
-        QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_USER,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.ADD_TASK_TO_USER,addTaskToUserData,typeAddTaskToUserData);
         return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
 
     public Optional<Response> updateTask(TaskData registerData) {
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> dataUpdateTask=new ArrayList<Object>(){
             {
                 add(registerData.getName());
-                add(registerData.getDescsription());
+                add(registerData.getDescription());
                 add(registerData.getCreateDate());
-                add(registerData.getDateOfNotifivation());
+                add(registerData.getDateOfNotification());
                 add(registerData.getIdTask());
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
-
+        List<Class> typeDataUpdateTask=new ArrayList<Class>(){{
             add(String.class);
             add(String.class);
             add(Timestamp.class);
             add(Timestamp.class);
             add(Integer.class);
-
-
         }};
 
-        QueryManager.executeQuery(SQLQuery.EDIT_TASK,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.EDIT_TASK,dataUpdateTask,typeDataUpdateTask);
         return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
     public Optional<Response> addTask(TaskData registerData) {
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> addTaskData=new ArrayList<Object>(){
             {
-
                 add(registerData.getName());
-                add(registerData.getDescsription());
+                add(registerData.getDescription());
                 add(registerData.getCreateDate());
-                add(registerData.getDateOfNotifivation());
+                add(registerData.getDateOfNotification());
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
-
+        List<Class> updateTaskData=new ArrayList<Class>(){{
             add(String.class);
             add(String.class);
             add(Timestamp.class);
             add(Timestamp.class);
-
 
         }};
 
-        QueryManager.executeQuery(SQLQuery.ADD_TASK,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.ADD_TASK,addTaskData,updateTaskData);
         return Optional.of(CodeResponse.OK.getResponseForCode());
     }
     public Optional<Response> getAllTaskForUser(UserID idGroup){
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
                 }),Arrays.asList(new Class[]{String.class}),
-                (result)->{
+                (resultArg)->{
                     List<TaskData> groupData=new ArrayList<>();
                     try {
 
-                        if(result.next()){
-
-
-                            // TASK.ID_TASK,TASK.NAME,TASK.DESCRIPTION,TASK.CREATE_DATE,TASK.DATE_OF_NOTIFICATION
-                            Integer idTask= result.getInt(1);
-                            String name= result.getString(2);
-                            String description= result.getString(3);
-                            Timestamp createDate= result.getTimestamp(4);
-                            Timestamp dateNotification= result.getTimestamp(5);
-
+                        if(resultArg.next()){
+                            Integer idTask= resultArg.getInt(1);
+                            String name= resultArg.getString(2);
+                            String description= resultArg.getString(3);
+                            Timestamp createDate= resultArg.getTimestamp(4);
+                            Timestamp dateNotification= resultArg.getTimestamp(5);
                             groupData.add(new TaskData(idTask,name,description,createDate,dateNotification));
 
                         }
@@ -189,19 +160,17 @@ public class TaskService {
                         throw new RuntimeException(e);
                     }
 
-
                     String json= null;
                     try {
-                        json = SaveDataAsJson.saveDataAsJson(groupData);
-                        return Optional.of(new Response(json,"getAllTaskForUser"));
+                        json = SaveDataAsJson.save(groupData);
+                        return Optional.of(new Response(json,RequestType.GET_ALL_TASK_FOR_USER.getNameRequest()));
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
 
 
-
                 });
 
-        return  resultx;
+        return  result;
     }
 }

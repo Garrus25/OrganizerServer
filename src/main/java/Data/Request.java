@@ -15,18 +15,18 @@ import java.io.StringWriter;
 
 public class
 Request {
+
+    private static final String ENCRYPTION_PASSWORD="xD";
     private String header;
-
-
 
     private String data;
 
     public Request(String header, String data) {
         this.header = header;
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword("xD");
+        encryptor.setPassword(ENCRYPTION_PASSWORD);
         String encrypted= encryptor.encrypt(data);
-       // encrypted=  "\""+encrypted+"\"";
+
         this.data = encrypted;
     }
 
@@ -43,17 +43,16 @@ Request {
     public String getData() {
 
         StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-        decryptor.setPassword("xD");
-      //  this.data=
+        decryptor.setPassword(ENCRYPTION_PASSWORD);
         return  decryptor.decrypt(data);
     }
 
     public void setData(String data) {
 
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword("xD");
+        encryptor.setPassword(ENCRYPTION_PASSWORD);
         String encrypted= encryptor.encrypt(data);
-       // encrypted=  "\""+encrypted+"\"";
+
         this.data = encrypted;
     }
 

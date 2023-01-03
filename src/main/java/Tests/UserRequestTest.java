@@ -1,7 +1,6 @@
 package Tests;
 
 import Data.*;
-import JSONUtility.CodeResponse;
 import JSONUtility.ReadObjectFromJson;
 import JSONUtility.SaveDataAsJson;
 import Tests.UtilityTest.Requests;
@@ -16,7 +15,7 @@ public class UserRequestTest {
     @Test
     void checkGetDataUser() throws JsonProcessingException {
         UserID idUser=new UserID("19");
-        Request request=new Request(RequestType.GET_USER_DATA.getNameRequest(), SaveDataAsJson.saveDataAsJson(idUser));
+        Request request=new Request(RequestType.GET_USER_DATA.getNameRequest(), SaveDataAsJson.save(idUser));
         Optional<Response> response= Requests.make2(request);
         System.out.println(":"+response.get().getData());
         Integer idUserData= 1;

@@ -3,10 +3,9 @@ package Data;
 public class EditTaskData {
 
     private String name;
-    private String descsription;
+    private String description;
     private String createDate;
-    private String dateOfNotifivation;
-
+    private String dateOfNotification;
 
     public EditTaskData(){
 
@@ -15,9 +14,9 @@ public class EditTaskData {
     public EditTaskData( String name, String descsription, String createDate, String dateOfNotifivation) {
 
         this.name = name;
-        this.descsription = descsription;
+        this.description = descsription;
         this.createDate = createDate;
-        this.dateOfNotifivation = dateOfNotifivation;
+        this.dateOfNotification = dateOfNotifivation;
     }
 
 
@@ -30,12 +29,12 @@ public class EditTaskData {
         this.name = name;
     }
 
-    public String getDescsription() {
-        return descsription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescsription(String descsription) {
-        this.descsription = descsription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCreateDate() {
@@ -46,11 +45,11 @@ public class EditTaskData {
         this.createDate = createDate;
     }
 
-    public String getDateOfNotifivation() {
-        return dateOfNotifivation;
+    public String getDateOfNotification() {
+        return dateOfNotification;
     }
 
-    public void setDateOfNotifivation(String dateOfNotifivation) {
-        this.dateOfNotifivation = dateOfNotifivation;
+    public void setDateOfNotification(String dateOfNotification) {
+        this.dateOfNotification = dateOfNotification;
     }
 }

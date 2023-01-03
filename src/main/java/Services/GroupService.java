@@ -18,87 +18,74 @@ public class GroupService {
 
 
     public Optional<Response> addUserToGroup(UserGroupData groupData){
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> dataAddUserToGroup=new ArrayList<Object>(){
             {
                 add(groupData.getIdUser());
                 add(groupData.getIdGroup());
-
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
+        List<Class> addUserToGroupTypeParam=new ArrayList<Class>(){{
             add(Integer.class);
             add(Integer.class);
-
-
         }};
 
-        QueryManager.executeQuery(SQLQuery.ADD_USER_TO_GROUP,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.ADD_USER_TO_GROUP,dataAddUserToGroup,addUserToGroupTypeParam);
         return Optional.of(CodeResponse.OK.getResponseForCode());
-
     }
 
     public Optional<Response> createGroup(GroupCreationData groupData){
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> createGroupData=new ArrayList<Object>(){
             {
                 add(groupData.getNameGroup());
                 add(groupData.getCodeGroup());
-
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
+        List<Class> createGroupType=new ArrayList<Class>(){{
             add(String.class);
             add(String.class);
-
         }};
 
-        QueryManager.executeQuery(SQLQuery.CREATE_GROUP,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.CREATE_GROUP,createGroupData,createGroupType);
         return Optional.of(CodeResponse.OK.getResponseForCode());
-
     }
 
 
     public Optional<Response> removeUserFromGroup(UserGroupData data){
-        List<Object> dataRegister=new ArrayList<Object>(){
+        List<Object> dataRemoveUserFromGroup=new ArrayList<Object>(){
             {
                 add(data.getIdUser());
                 add(data.getIdGroup());
-
             }
         };
 
-        List<Class> dataRegisterColumnType=new ArrayList<Class>(){{
-
+        List<Class> typeRemoveUserFromGroup=new ArrayList<Class>(){{
             add(Integer.class);
             add(Integer.class);
-
-
         }};
-        QueryManager.executeQuery(SQLQuery.REMOVE_USER_FROM_GROUP,dataRegister,dataRegisterColumnType);
+        QueryManager.executeQuery(SQLQuery.REMOVE_USER_FROM_GROUP,dataRemoveUserFromGroup,typeRemoveUserFromGroup);
         return Optional.of(CodeResponse.OK.getResponseForCode());
     }
 
     public Optional<Response> getMembershipGroup(GroupId idGroup){
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_MEMBERSHIP_GROUP_ABOUT_ID, Arrays.asList(new Integer[]{idGroup.getGroupId()
-                        }),Arrays.asList(new Class[]{Integer.class}),
-                (result)->{
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_ALL_MEMBERSHIP_GROUP_ABOUT_ID, Arrays.asList(new Integer[]{idGroup.getGroupId()}),Arrays.asList(new Class[]{Integer.class})
+                , (resultArg)->{
+
                     List<UserData> groupData=new ArrayList<>();
+
                     try {
 
-                        if(result.next()){
-//SELECT user.ID_USER,user.LOGIN,user.PASSWORD,user.EMAIL,user.NAME,user.SURNAME,user.COLOR,user.AUTHENTICATION_TOKEN,user.IS_ACTIVE FROM GROUPS join groups_users on groups_users.ID_GROUP=groups.ID_GROUP join user on user.ID_USER=groups_users.ID_USER where groups.ID_GROUP=?
-                            Integer idUser= result.getInt(1);
-                            String login= result.getString(2);
-                            String password= result.getString(3);
-                            String email= result.getString(4);
-                            String name= result.getString(5);
-                            String surname= result.getString(6);
-                            String color= result.getString(7);
-                            Integer authorization=result.getInt(8);
-                            Integer isActive= result.getInt(9);
+                        if(resultArg.next()){
+                            int idUser= resultArg.getInt(1);
+                            String login= resultArg.getString(2);
+                            String password= resultArg.getString(3);
+                            String email= resultArg.getString(4);
+                            String name= resultArg.getString(5);
+                            String surname= resultArg.getString(6);
+                            String color= resultArg.getString(7);
+                            Integer authorization=resultArg.getInt(8);
+                            Integer isActive= resultArg.getInt(9);
                             groupData.add(new UserData(idUser,login,password,email,name,surname,color,authorization,isActive));
 
                         }
@@ -109,36 +96,30 @@ public class GroupService {
 
                     String json= null;
                     try {
-                        json = SaveDataAsJson.saveDataAsJson(groupData);
-                        return Optional.of(new Response(json,"getMembershipGroupAboutId"));
+                        json = SaveDataAsJson.save(groupData);
+                        return Optional.of(new Response(json,RequestType.GET_MEMBERSHIP_GROUP_ABOUT_UD.getNameRequest()));
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
 
 
-
                 });
 
-        return  resultx;
+        return  result;
     }
 
     public Optional<Response> getAllDataGroup(){
 
 
-
-
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_ALL_GROUP_DATA, new ArrayList<>(),new ArrayList<>(),
-                (result)->{
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_ALL_GROUP_DATA, new ArrayList<>(),new ArrayList<>(),
+                (resultReq)->{
                     List<GroupData> groupData=new ArrayList<>();
                     try {
 
-
-
-                        if(result.next()){
-
-                            Integer idGroup= result.getInt(1);
-                            String nameGroup= result.getString(2);
-                            String codeGroup= result.getString(3);
+                        if(resultReq.next()){
+                            int idGroup= resultReq.getInt(1);
+                            String nameGroup= resultReq.getString(2);
+                            String codeGroup= resultReq.getString(3);
                             groupData.add(new GroupData(idGroup,nameGroup,codeGroup));
 
                         }
@@ -149,17 +130,16 @@ public class GroupService {
 
                     String json= null;
                     try {
-                        json = SaveDataAsJson.saveDataAsJson(groupData);
-                        return Optional.of(new Response(json,"getGroupData"));
+                        json = SaveDataAsJson.save(groupData);
+                        return Optional.of(new Response(json,RequestType.GET_ALL_GROUP_DATA.getNameRequest()));
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
 
 
-
                 });
 
-        return  resultx;
+        return  result;
     }
 
 }

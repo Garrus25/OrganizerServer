@@ -2,8 +2,6 @@ package HandlerRequest;
 
 import Data.Request;
 import Data.Response;
-import HandlerRequest.LoginRequestHandler;
-import HandlerRequest.RegisterRequestHandler;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,17 +19,17 @@ public class RequestParser {
 
     TaskRequestHandler taskRequestHandler;
     UserRequestHandler userRequestHandler;
-    private void registerRequestHandler(List<Function<Request,Optional<Response>>> handlers){
+    private void registerRequestHandlers(List<Function<Request,Optional<Response>>> handlers){
         requestHandlers.addAll(handlers);
     }
 
 
     private void registerClassRequestParser(){
-        registerRequestHandler(loginRequestHandler.getRequestsHandler());
-        registerRequestHandler(registerRequestHandler.getRequestsHandler());
-        registerRequestHandler(groupRegisterHandler.getRequestsHandler());
-        registerRequestHandler(taskRequestHandler.getRequestsHandler());
-        registerRequestHandler(userRequestHandler.getRequestsHandler());
+        registerRequestHandlers(loginRequestHandler.getRequestsHandler());
+        registerRequestHandlers(registerRequestHandler.getRequestsHandler());
+        registerRequestHandlers(groupRegisterHandler.getRequestsHandler());
+        registerRequestHandlers(taskRequestHandler.getRequestsHandler());
+        registerRequestHandlers(userRequestHandler.getRequestsHandler());
     }
 
     public RequestParser() throws SQLException {

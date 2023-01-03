@@ -18,58 +18,55 @@ public class LoginService {
 
 
     public Optional<Response> isUserLoginDataValid(LoginAndPassword loginAndPassword) throws SQLException {
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
+
+        String VALID_LOGIN_DATA="YES";
+        String ERROR_LOGIN_DATA="NO";
+
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_DATA_VALID, Arrays.asList(new String[]{loginAndPassword.getLogin(),
                         loginAndPassword.getPassword()}),Arrays.asList(new Class[]{String.class,String.class}),
-                (result)->{
+                   (resultArg)->{
                     try {
-
-                        if(result.next()){
-
-                            Integer isValid= result.getInt(1);
-
+                        if(resultArg.next()){
+                            int isValid= resultArg.getInt(1);
                             if(isValid>0){
-                                ValidLoginData x=new ValidLoginData("YES");
-                                String json=SaveDataAsJson.saveDataAsJson(x);
-                                return Optional.of( new Response(json,"getIdUserFromLogin"));
+                                ValidLoginData x=new ValidLoginData(VALID_LOGIN_DATA);
+                                String json=SaveDataAsJson.save(x);
+                                return Optional.of( new Response(json,RequestType.USER_LOGIN_DATA_VALID.getNameRequest()));
                             }else{
-                                ValidLoginData x=new ValidLoginData("NO");
-                                String json=SaveDataAsJson.saveDataAsJson(x);
-                                return Optional.of( new Response(json,"getIdUserFromLogin"));
+                                ValidLoginData x=new ValidLoginData(ERROR_LOGIN_DATA);
+                                String json=SaveDataAsJson.save(x);
+                                return Optional.of( new Response(json,RequestType.USER_LOGIN_DATA_VALID.getNameRequest()));
                             }
                         }else{
-                            ValidLoginData x=new ValidLoginData("NO");
-                            String json=SaveDataAsJson.saveDataAsJson(x);
-                            return Optional.of(new Response(json,"getIdUserFromLogin"));
+                            ValidLoginData x=new ValidLoginData(ERROR_LOGIN_DATA);
+                            String json=SaveDataAsJson.save(x);
+                            return Optional.of(new Response(json,RequestType.USER_LOGIN_DATA_VALID.getNameRequest()));
 
                         }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (JsonProcessingException e) {
+                    } catch (SQLException | JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-                });
-        return resultx;
+                   });
+        return result;
     }
 
 
     public Optional<Response> getUserIdFromUserLogin(String loginUser) throws SQLException {
-        System.out.println("..:"+SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN);
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
-                (result)->{
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_USER_ID_BASED_ON_USER_LOGIN, Collections.singletonList(loginUser),Collections.singletonList(String.class),
+                (resultArg)->{
                     try {
 
-                        if(result.next()){
-
-                            String userID= String.valueOf(result.getInt(1));
+                        if(resultArg.next()){
+                            String userID= String.valueOf(resultArg.getInt(1));
                             UserID userIdentification=new UserID(userID);
                             if(userID.length()>0){
-                                String json=SaveDataAsJson.saveDataAsJson(userIdentification);
-                                return Optional.of( new Response(json,"getIdUserFromLogin"));
+                                String json=SaveDataAsJson.save(userIdentification);
+                                return Optional.of( new Response(json,RequestType.GET_USER_ID_FROM_LOGIN.getNameRequest()));
                             }
                         }else{
 
                             ErrorResponse error=new ErrorResponse("User with this login no exists");
-                            return Optional.of(new Response(error.getErrorCode(),"getIdUserFromLogin"));
+                            return Optional.of(new Response(error.getErrorCode(),RequestType.GET_USER_ID_FROM_LOGIN.getNameRequest()));
 
                         }
                     } catch (SQLException e) {
@@ -79,44 +76,40 @@ public class LoginService {
                     }
                     return null;
                 });
-        return resultx;
+        return result;
     }
-    //If User Login Available
+
 
     public Optional<Response> ifUserLoginAvailable(String data) throws SQLException, JsonProcessingException {
 
+        String AVAILABLE_LOGIN="YES";
+        String NO_AVAILABLE_LOGIN="NO";
 
-        Optional<Response> resultx= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class),
-                (result)->{
+        String NO_USER_ABOUT_LOGIN="0";
+
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.IS_USER_LOGIN_EXISTS, Collections.singletonList(data),Collections.singletonList(String.class),
+                (resultParam)->{
                     try {
 
-                        if(result.next()){
+                        if(resultParam.next()){
+                            String isUserAboutLoginExists= String.valueOf(resultParam.getInt(1));
 
-                            String isUserAboutLoginExists= String.valueOf(result.getInt(1));
-
-
-                            if(!isUserAboutLoginExists.trim().equals("0")){
-
-                                ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","NO");
-                                String json=SaveDataAsJson.saveDataAsJson(responseLogin);
-                                return Optional.of( new Response(json,"isLoginAvailable"));
+                            if(!isUserAboutLoginExists.trim().equals(NO_USER_ABOUT_LOGIN)){
+                                ResponseLogin responseLogin=new ResponseLogin(RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest(),NO_AVAILABLE_LOGIN);
+                                String json=SaveDataAsJson.save(responseLogin);
+                                return Optional.of( new Response(json,RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest()));
                             }else{
-
-                                ResponseLogin responseLogin=new ResponseLogin("isLoginAvailable","YES");
-                                String json=SaveDataAsJson.saveDataAsJson(responseLogin);
-
-                                return Optional.of(new Response(json,"isLoginAvailable"));
+                                ResponseLogin responseLogin=new ResponseLogin(RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest(),AVAILABLE_LOGIN);
+                                String json=SaveDataAsJson.save(responseLogin);
+                                return Optional.of(new Response(json,RequestType.IF_USER_LOGIN_AVAILABLE.getNameRequest()));
                             }
                         }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (JsonProcessingException e) {
+                    } catch (SQLException | JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-                    return null;
+                    return Optional.empty();
                 });
-        return resultx;
-
+        return result;
 
     }
 

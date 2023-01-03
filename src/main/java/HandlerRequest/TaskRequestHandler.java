@@ -12,32 +12,32 @@ public class TaskRequestHandler extends RequestService{
 
     public void add_getAllTaskForGroup() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.GET_ALL_TASK_FOR_GROUP.getNameRequest(),request,(requestParam)->{
-            GroupId loginData = ReadObjectFromJson.read(requestParam.getData(), GroupId.class);
-            Optional<Response> response = taskService.getAllTaskForGroup(loginData);
+            GroupId groupIdRequestParam = ReadObjectFromJson.read(requestParam.getData(), GroupId.class);
+            Optional<Response> response = taskService.getAllTaskForGroup(groupIdRequestParam);
             return response;
         }));
     }
 
     public void add_getAllTaskForUser() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.GET_ALL_TASK_FOR_USER.getNameRequest(), request,(requestParam)->{
-            UserID loginData = ReadObjectFromJson.read(requestParam.getData(), UserID.class);
-            Optional<Response> response = taskService.getAllTaskForUser(loginData);
+            UserID userIdRequestParam = ReadObjectFromJson.read(requestParam.getData(), UserID.class);
+            Optional<Response> response = taskService.getAllTaskForUser(userIdRequestParam);
             return response;
         }));
     }
 
     public void add_addTask() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.ADD_NEW_TASK.getNameRequest(), request,(requestParam)->{
-            TaskData loginData = ReadObjectFromJson.read(requestParam.getData(), TaskData.class);
-            Optional<Response> response = taskService.addTask(loginData);
+            TaskData taskDataRequestParam = ReadObjectFromJson.read(requestParam.getData(), TaskData.class);
+            Optional<Response> response = taskService.addTask(taskDataRequestParam);
             return response;
         }));
     }
 
     public void add_addTaskToUser() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.ADD_TASK_TO_USER.getNameRequest(),request,(requestParam)->{
-            AddTaskToUser loginData = ReadObjectFromJson.read(requestParam.getData(), AddTaskToUser.class);
-            Optional<Response> response = taskService.addTaskToUser(loginData);
+            AddTaskToUser addTaskToUserRequestParam = ReadObjectFromJson.read(requestParam.getData(), AddTaskToUser.class);
+            Optional<Response> response = taskService.addTaskToUser(addTaskToUserRequestParam);
             return response;
         }));
     }
@@ -45,16 +45,16 @@ public class TaskRequestHandler extends RequestService{
 
     public void add_addTaskToGroup() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.ADD_TASK_TO_GROUP.getNameRequest(), request,(requestParam)->{
-            AddTaskToGroupData loginData = ReadObjectFromJson.read(requestParam.getData(), AddTaskToGroupData.class);
-            Optional<Response> response = taskService.addTaskToGroup(loginData);
+            AddTaskToGroupData addTaskToGroupDataRequestParam = ReadObjectFromJson.read(requestParam.getData(), AddTaskToGroupData.class);
+            Optional<Response> response = taskService.addTaskToGroup(addTaskToGroupDataRequestParam);
             return response;
         }));
     }
 
     public void add_updateTask() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.UPDATE_TASK.getNameRequest(), request,(requestParam)->{
-            TaskData loginData = ReadObjectFromJson.read(requestParam.getData(), TaskData.class);
-            Optional<Response> response = taskService.updateTask(loginData);
+            TaskData taskDataRequestParam = ReadObjectFromJson.read(requestParam.getData(), TaskData.class);
+            Optional<Response> response = taskService.updateTask(taskDataRequestParam);
             return response;
         }));
     }

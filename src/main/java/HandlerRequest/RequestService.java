@@ -27,15 +27,15 @@ public abstract class RequestService {
    }
 
 
-   public Optional<Response> analiseRequest(String nameGoalRequest, Request req , CheckedFunction<Request,Optional<Response>> func){
+   public Optional<Response> analiseRequest(String nameGoalRequest, Request request, CheckedFunction<Request,Optional<Response>> func){
        try {
-           if (req.getHeader().equals(nameGoalRequest)) {
-               return func.apply(req);
+           if (request.getHeader().equals(nameGoalRequest)) {
+               return func.apply(request);
            } else {
                return Optional.empty();
            }
        }catch (Exception exp){
-        throw   new RuntimeException(exp);
+            throw   new RuntimeException(exp);
        }
 
    }

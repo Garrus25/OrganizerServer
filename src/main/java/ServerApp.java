@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.Future;
 
 class ServerApp {
 
@@ -109,7 +108,7 @@ class ServerApp {
             if(response.isPresent()) {
 
 
-                 message = SaveDataAsJson.saveDataAsJson(response.get());
+                 message = SaveDataAsJson.save(response.get());
 
             }
            while (message.length()<540){

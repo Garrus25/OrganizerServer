@@ -17,7 +17,7 @@ public class RegistrationRequestTest {
     void checkRegistrationTemporary() throws JsonProcessingException {
 
         RegisterData registerData = new RegisterData(1,"konrad99","asdas","asd@assf","asd","asd","#asd",19,false);
-        Request request = new Request(RequestType.REGISTER_USER_TEMPORARY.getNameRequest(), SaveDataAsJson.saveDataAsJson(registerData));
+        Request request = new Request(RequestType.REGISTER_USER_TEMPORARY.getNameRequest(), SaveDataAsJson.save(registerData));
         Optional<Response> response= Requests.make2(request);
 
         Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
@@ -25,7 +25,7 @@ public class RegistrationRequestTest {
     }
     @Test void checkIsCodeVerficationValid_Valid() throws JsonProcessingException {
         ConfirmCodeData confirmCodeDataValid=new ConfirmCodeData("19",19);
-        Request request=new Request(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), SaveDataAsJson.saveDataAsJson(confirmCodeDataValid));
+        Request request=new Request(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), SaveDataAsJson.save(confirmCodeDataValid));
         Optional<Response> response=Requests.make2(request);
         ConfirmCodeResponse codeResp=ReadObjectFromJson.read( response.get().getData(),ConfirmCodeResponse.class);
         Assert.assertTrue(codeResp.getCodeValid());
@@ -34,7 +34,7 @@ public class RegistrationRequestTest {
 
     @Test void checkIsCodeVerficationValid_NoValid() throws JsonProcessingException {
         ConfirmCodeData confirmCodeDataValid=new ConfirmCodeData("32434",1);
-        Request request=new Request(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), SaveDataAsJson.saveDataAsJson(confirmCodeDataValid));
+        Request request=new Request(RequestType.IS_CODE_CONFIRM_ACCOUNT_VALID.getNameRequest(), SaveDataAsJson.save(confirmCodeDataValid));
         Optional<Response> response=Requests.make2(request);
         ConfirmCodeResponse codeResp=ReadObjectFromJson.read( response.get().getData(),ConfirmCodeResponse.class);
         Assert.assertFalse(codeResp.getCodeValid());
@@ -43,7 +43,7 @@ public class RegistrationRequestTest {
 
     @Test void check_setUserAccountActive() throws JsonProcessingException {
         UserID idUser=new UserID("1");
-        Request request=new Request(RequestType.REGISTER_USER.getNameRequest(),SaveDataAsJson.saveDataAsJson(idUser));
+        Request request=new Request(RequestType.REGISTER_USER.getNameRequest(),SaveDataAsJson.save(idUser));
         Optional<Response> response=Requests.make2(request);
         System.out.println(":"+response.get().getData());
         System.out.println(response);

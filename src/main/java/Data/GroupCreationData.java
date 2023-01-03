@@ -5,8 +5,6 @@ public class GroupCreationData {
     private String codeGroup;
 
 
-
-
     public GroupCreationData(){}
 
     public GroupCreationData(String nameGroup, String codeGroup) {

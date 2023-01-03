@@ -10,9 +10,7 @@ import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 public class UserServices {
@@ -35,13 +33,11 @@ public class UserServices {
                             Integer authorization=resultParam.getInt(8);
                             Integer isActive= resultParam.getInt(9);
                             UserData user=new UserData(idUserData,login,password,email,name,surname,color,authorization,isActive);
-                            String json = SaveDataAsJson.saveDataAsJson(user);
+                            String json = SaveDataAsJson.save(user);
                             return Optional.of(new Response(json, RequestType.GET_USER_DATA.getNameRequest()));
                         }
 
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (JsonProcessingException e) {
+                    } catch (SQLException | JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
 
