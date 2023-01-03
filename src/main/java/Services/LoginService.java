@@ -1,11 +1,11 @@
 package Services;
 
-import Data.*;
+import Data_mapperJsonClass.*;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import responses.ErrorResponse;
+import Data_mapperJsonClass.ErrorResponse;
 
 import java.sql.SQLException;
 import java.util.Arrays;

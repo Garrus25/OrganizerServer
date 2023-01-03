@@ -1,6 +1,6 @@
 package JSONUtility;
 
-import Data.Response;
+import Data_mapperJsonClass.Response;
 
 public enum CodeResponse {
 

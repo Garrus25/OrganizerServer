@@ -1,9 +1,9 @@
 package Services;
 
-import Data.RequestType;
-import Data.Response;
-import Data.UserData;
-import Data.UserID;
+import Data_mapperJsonClass.RequestType;
+import Data_mapperJsonClass.Response;
+import Data_mapperJsonClass.UserData;
+import Data_mapperJsonClass.UserID;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
 import JSONUtility.SaveDataAsJson;

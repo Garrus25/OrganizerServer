@@ -1,6 +1,5 @@
 package Services;
 
-import Utility.TokenAuthotizeGeneratorService;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.config.ConfigLoader;
 import org.simplejavamail.email.EmailBuilder;

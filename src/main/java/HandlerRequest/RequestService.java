@@ -1,13 +1,9 @@
 package HandlerRequest;
 
-import Data.CheckedFunction;
-import Data.LoginData;
-import Data.Request;
-import Data.Response;
-import JSONUtility.ReadObjectFromJson;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import Interfaces.CheckedFunction;
+import Data_mapperJsonClass.Request;
+import Data_mapperJsonClass.Response;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

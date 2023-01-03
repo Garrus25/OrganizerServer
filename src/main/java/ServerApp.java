@@ -1,5 +1,5 @@
-import Data.Request;
-import Data.Response;
+import Data_mapperJsonClass.Request;
+import Data_mapperJsonClass.Response;
 import HandlerRequest.RequestParser;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonParser;

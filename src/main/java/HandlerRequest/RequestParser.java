@@ -1,7 +1,7 @@
 package HandlerRequest;
 
-import Data.Request;
-import Data.Response;
+import Data_mapperJsonClass.Request;
+import Data_mapperJsonClass.Response;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

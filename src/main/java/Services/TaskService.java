@@ -1,6 +1,6 @@
 package Services;
 
-import Data.*;
+import Data_mapperJsonClass.*;
 import Database.QueryManager;
 import Database.SQL.SQLQuery;
 import JSONUtility.CodeResponse;

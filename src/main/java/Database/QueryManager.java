@@ -1,9 +1,8 @@
 package Database;
 
-import Data.Response;
+import Data_mapperJsonClass.Response;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
