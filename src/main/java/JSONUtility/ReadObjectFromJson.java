@@ -12,6 +12,7 @@ public class ReadObjectFromJson {
     public static <T>  T read(String data,Class dataOut) throws JsonProcessingException {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
             T me = (T) mapper.readValue(data, dataOut);
             return me;
 
