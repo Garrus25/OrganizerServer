@@ -36,7 +36,8 @@ public class TaskService {
                             LocalDateTime date2 = resultArg.getTimestamp(5).toLocalDateTime();
                             String login = resultArg.getString(6);
                             String groupName = resultArg.getString(7);
-                            groupData.add(new Event(name, groupName, date2, description, "", login, idTask));
+
+                            groupData.add(new Event(name, groupName, date2, description, "", login, idTask,idGroup.getGroupId()));
 
                         }
                     } catch (SQLException e) {

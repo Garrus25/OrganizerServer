@@ -5,12 +5,19 @@ import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class ServerApp {
 
@@ -21,6 +28,91 @@ class ServerApp {
     private Selector selector;
     private static final int BUFFER_CAPACITY_IN_BYTES = 4200;
     private static final Integer PORT_NUMBER = 2137;
+
+
+    private final ExecutorService exec = Executors.newFixedThreadPool(16);
+    public void start2() throws IOException {
+        ServerSocket server = new ServerSocket(PORT_NUMBER);
+        while (true) {
+            Socket socket = server.accept();
+            exec.execute(() -> handleRequest(socket));
+        }
+    }
+
+
+
+    private void handleRequest(Socket socket)  {
+        System.out.println("Start analise request");
+
+        PrintWriter out = null;
+        BufferedReader in = null;
+        try{
+        out = new PrintWriter(
+                socket.getOutputStream(), true);
+        System.out.println("A");
+
+        // get the inputstream of client
+        in = new BufferedReader(
+                new InputStreamReader(
+                        socket.getInputStream()));
+            System.out.println("B");
+        String line;
+        String allText="";
+        line=in.readLine();
+       /* while ((line = in.readLine()) != null) {
+            System.out.println("C : "+line);
+            // writing the received message from
+            // client
+            allText+=line;
+
+        }*/
+        System.out.println("Request message raw "+line);
+
+            System.out.printf(
+                    " Sent from the client: %s\n",
+                    line);
+
+
+
+            RequestParser parser = new RequestParser();
+            ObjectMapper mapper = new ObjectMapper();
+
+            mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+
+            Request me = mapper.readValue((line.trim()), Request.class);
+
+            System.out.println("Request data "+me.getData());
+
+
+
+
+            Optional<Response> response = parser.requestParser(me);
+            String message ="";
+            if(response.isPresent()) {
+
+
+                message = SaveDataAsJson.save(response.get());
+
+                out.println(message);
+            }
+    }catch (Exception x){
+            x.printStackTrace();
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

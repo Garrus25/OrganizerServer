@@ -24,11 +24,9 @@ public class TaskRequestTest {
 
         TaskData taskData=new TaskData(2,"Zrobić","Coś zrobić",date,date);
         Request request=new Request(RequestType.ADD_NEW_TASK.getNameRequest(), SaveDataAsJson.save(taskData));
-        Optional<Response> response= Requests.make2(request);
-        IdTask mockTask=new IdTask(1);
-
+        Optional<Response> response= Requests.makeAsync(request);
+        IdTask mockTask=new IdTask(4);
         IdTask idNewTask=ReadObjectFromJson.read(response.get().getData(),IdTask.class);
-
         Assert.assertEquals(idNewTask,mockTask);
     }
 
