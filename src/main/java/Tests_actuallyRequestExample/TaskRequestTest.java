@@ -6,6 +6,7 @@ import JSONUtility.ReadObjectFromJson;
 import JSONUtility.SaveDataAsJson;
 import Utility.Requests;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sun.mail.imap.protocol.ID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -24,7 +25,11 @@ public class TaskRequestTest {
         TaskData taskData=new TaskData(2,"Zrobić","Coś zrobić",date,date);
         Request request=new Request(RequestType.ADD_NEW_TASK.getNameRequest(), SaveDataAsJson.save(taskData));
         Optional<Response> response= Requests.make2(request);
-        Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
+        IdTask mockTask=new IdTask(1);
+
+        IdTask idNewTask=ReadObjectFromJson.read(response.get().getData(),IdTask.class);
+
+        Assert.assertEquals(idNewTask,mockTask);
     }
 
     @Test void addTaskToUser() throws JsonProcessingException {

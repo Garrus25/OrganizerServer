@@ -142,7 +142,29 @@ public class TaskService {
         }};
 
         QueryManager.executeQuery(SQLQuery.ADD_TASK,addTaskData,updateTaskData);
-        return Optional.of(CodeResponse.OK.getResponseForCode());
+
+
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_MAX_ID_TASK, new ArrayList<>(),new ArrayList<>(),
+                (resultArg)->{
+                    try {
+                        if(resultArg.next()){
+                            int idTaskMaxV= resultArg.getInt(1);
+                            IdTask idTaskMax=new IdTask(idTaskMaxV);
+                            String json=SaveDataAsJson.save(idTaskMax);
+                            return Optional.of( new Response(json,RequestType.ADD_NEW_TASK.getNameRequest()));
+
+                        }else{
+
+
+                        }
+                    } catch (SQLException | JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return Optional.of(CodeResponse.OK.getResponseForCode());
+                });
+
+        return result;
+
     }
     public Optional<Response> getAllTaskForUser(UserID idGroup){
         Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_ALL_TASK_FOR_USER, Arrays.asList(new String[]{idGroup.getUserID()
