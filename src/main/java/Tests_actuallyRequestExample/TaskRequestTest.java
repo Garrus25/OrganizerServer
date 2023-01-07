@@ -24,7 +24,7 @@ public class TaskRequestTest {
 
         TaskData taskData=new TaskData(2,"Zrobić","Coś zrobić",date,date);
         Request request=new Request(RequestType.ADD_NEW_TASK.getNameRequest(), SaveDataAsJson.save(taskData));
-        Optional<Response> response= Requests.makeAsync(request);
+        Optional<Response> response= Requests.make2(request);
         IdTask mockTask=new IdTask(4);
         IdTask idNewTask=ReadObjectFromJson.read(response.get().getData(),IdTask.class);
         Assert.assertEquals(idNewTask,mockTask);
@@ -92,7 +92,7 @@ public class TaskRequestTest {
         Optional<Response> response= Requests.make2(request);
 
         List<Event> listTask=new ArrayList<>();
-        Event taskDataMock= new Event("Zrobić bałagan", "testowaGrupa", date, "Coś zrobić","",  "konrad99", 1);
+        Event taskDataMock= new Event("Zrobić bałagan", "testowaGrupa", date, "Coś zrobić","",  "konrad99", 1,3,1);
 
         listTask.add(taskDataMock);
 

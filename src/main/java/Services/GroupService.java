@@ -76,7 +76,7 @@ public class GroupService {
 
                     try {
 
-                        if(resultArg.next()){
+                        while(resultArg.next()){
                             int idUser= resultArg.getInt(1);
                             String login= resultArg.getString(2);
                             String password= resultArg.getString(3);

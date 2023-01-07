@@ -22,7 +22,7 @@ public class Requests {
 
 
 
-    public static Optional<Response> make2(Request request){
+    public static Optional<Response> make(Request request){
         try (AsynchronousSocketChannel client =
                      AsynchronousSocketChannel.open()) {
             Future<Void> result = client.connect(
@@ -67,19 +67,20 @@ public class Requests {
         }
         return Optional.empty();
     }
-    public static Optional<Response> makeAsync(Request request)  {
 
-        Socket clientSocket;
-        PrintWriter out;
-       BufferedReader in;
-       try {
-           clientSocket = new Socket("127.0.0.1", 2137);
-           out = new PrintWriter(clientSocket.getOutputStream(), true);
-           in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            out.println(SaveDataAsJson.save(request));
-           String resp = in.readLine();
-           System.out.println(resp);
-           Response response= ReadObjectFromJson.read(resp,Response.class);
+    private static final String  IP_ADDRESS_SERVER="127.0.0.1";
+    private static final Integer PORT_NUMBER=2137;
+    public static Optional<Response> make2(Request request)  {
+
+       try (Socket clientSocket = new Socket(IP_ADDRESS_SERVER, PORT_NUMBER);
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+       ) {
+
+           out.println(SaveDataAsJson.save(request));
+           String responseRawText = in.readLine();
+
+           Response response= ReadObjectFromJson.read(responseRawText,Response.class);
            return Optional.of(response);
        }catch (Exception x){
             x.printStackTrace();

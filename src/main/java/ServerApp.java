@@ -29,73 +29,18 @@ class ServerApp {
     private static final int BUFFER_CAPACITY_IN_BYTES = 4200;
     private static final Integer PORT_NUMBER = 2137;
 
+    private static final Integer THREADS_QUANTITY=16;
 
-    private final ExecutorService exec = Executors.newFixedThreadPool(16);
-    public void start2() throws IOException {
-        ServerSocket server = new ServerSocket(PORT_NUMBER);
-        while (true) {
-            Socket socket = server.accept();
-            exec.execute(() -> handleRequest(socket));
-        }
-    }
+    private final ExecutorService exec = Executors.newFixedThreadPool(THREADS_QUANTITY);
+    public void start() throws IOException {
 
-
-
-    private void handleRequest(Socket socket)  {
-        System.out.println("Start analise request");
-
-        PrintWriter out = null;
-        BufferedReader in = null;
         try{
-        out = new PrintWriter(
-                socket.getOutputStream(), true);
-        System.out.println("A");
-
-        // get the inputstream of client
-        in = new BufferedReader(
-                new InputStreamReader(
-                        socket.getInputStream()));
-            System.out.println("B");
-        String line;
-        String allText="";
-        line=in.readLine();
-       /* while ((line = in.readLine()) != null) {
-            System.out.println("C : "+line);
-            // writing the received message from
-            // client
-            allText+=line;
-
-        }*/
-        System.out.println("Request message raw "+line);
-
-            System.out.printf(
-                    " Sent from the client: %s\n",
-                    line);
-
-
-
-            RequestParser parser = new RequestParser();
-            ObjectMapper mapper = new ObjectMapper();
-
-            mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
-
-            Request me = mapper.readValue((line.trim()), Request.class);
-
-            System.out.println("Request data "+me.getData());
-
-
-
-
-            Optional<Response> response = parser.requestParser(me);
-            String message ="";
-            if(response.isPresent()) {
-
-
-                message = SaveDataAsJson.save(response.get());
-
-                out.println(message);
+            ServerSocket server = new ServerSocket(PORT_NUMBER);
+            while (true) {
+                Socket socket = server.accept();
+                exec.execute(() -> handleRequest(socket));
             }
-    }catch (Exception x){
+        }catch (Exception x){
             x.printStackTrace();
         }
 
@@ -103,6 +48,37 @@ class ServerApp {
 
 
 
+    private void handleRequest(Socket socket) {
+
+        try (PrintWriter out = new PrintWriter(
+                socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            String line;
+            line = in.readLine();
+
+            RequestParser parser = new RequestParser();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+
+            Request me = mapper.readValue((line.trim()), Request.class);
+
+
+            Optional<Response> response = parser.requestParser(me);
+
+            if (response.isPresent()) {
+
+                String  message = SaveDataAsJson.save(response.get());
+                out.println(message);
+            }
+
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
 
 
@@ -116,7 +92,10 @@ class ServerApp {
 
 
 
-    public void start() throws IOException, SQLException {
+
+
+
+    public void start2() throws IOException, SQLException {
         selector = Selector.open();
 
         ssc = ServerSocketChannel.open();

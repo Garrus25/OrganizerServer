@@ -13,6 +13,8 @@ public class Event {
     private String type;
     private Integer idGroup;
 
+    private Integer idUser;
+
     public Event(String eventName, String group, LocalDateTime date, String description, String type, Integer taskId) {
         this.eventName = eventName;
         this.group = group;
@@ -24,7 +26,7 @@ public class Event {
         this.idGroup = idGroup;
     }
 
-    public Event(String eventName, String group, LocalDateTime date, String description, String type, String login,  Integer taskId,Integer idGroup) {
+    public Event(String eventName, String group, LocalDateTime date, String description, String type, String login,  Integer taskId,Integer idGroup,Integer idUser) {
         this.eventName = eventName;
         this.group = group;
         this.date = date;
@@ -33,6 +35,7 @@ public class Event {
         this.login = login;
         this.taskId = taskId;
         this.idGroup=idGroup;
+        this.idUser = idUser;
     }
 
     public Event() {
