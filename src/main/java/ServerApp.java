@@ -46,8 +46,6 @@ class ServerApp {
 
     }
 
-
-
     private void handleRequest(Socket socket) {
 
         try (PrintWriter out = new PrintWriter(

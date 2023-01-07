@@ -72,13 +72,13 @@ public class Requests {
     private static final Integer PORT_NUMBER=2137;
     public static Optional<Response> make2(Request request)  {
 
-       try (Socket clientSocket = new Socket(IP_ADDRESS_SERVER, PORT_NUMBER);
+        try (Socket clientSocket = new Socket(IP_ADDRESS_SERVER, PORT_NUMBER);
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
        ) {
 
-           out.println(SaveDataAsJson.save(request));
-           String responseRawText = in.readLine();
+            out.println(SaveDataAsJson.save(request));
+            String responseRawText = in.readLine();
 
            Response response= ReadObjectFromJson.read(responseRawText,Response.class);
            return Optional.of(response);

@@ -66,10 +66,12 @@ public class TaskService {
             {
                 add(registerData.getIdUser());
                 add(registerData.getIdGroup());
+                add(registerData.getIdTask());
             }
         };
 
         List<Class> typeDataAddTaskToGroup=new ArrayList<Class>(){{
+            add(Integer.class);
             add(Integer.class);
             add(Integer.class);
 
