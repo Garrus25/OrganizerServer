@@ -1,6 +1,5 @@
 package Data_mapperJsonClass;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Event {
@@ -12,10 +11,9 @@ public class Event {
     private String login;
     private String type;
     private Integer idGroup;
-
     private Integer idUser;
 
-    public Event(String eventName, String group, LocalDateTime date, String description, String type, Integer taskId) {
+    public Event(String eventName, String group, LocalDateTime date, String description, String type, Integer taskId, Integer idGroup,Integer idUser) {
         this.eventName = eventName;
         this.group = group;
         this.date = date;
@@ -24,9 +22,10 @@ public class Event {
         this.login = "";
         this.taskId = taskId;
         this.idGroup = idGroup;
+        this.idUser = idUser;
     }
 
-    public Event(String eventName, String group, LocalDateTime date, String description, String type, String login,  Integer taskId,Integer idGroup,Integer idUser) {
+    public Event(String eventName, String group, LocalDateTime date, String description, String type, String login, Integer taskId,Integer idGroup,Integer idUser) {
         this.eventName = eventName;
         this.group = group;
         this.date = date;
@@ -97,6 +96,23 @@ public class Event {
         this.type = type;
     }
 
+    public Integer getIdGroup() {
+        return idGroup;
+    }
+
+
+    public void setIdGroup(Integer idGroup) {
+        this.idGroup = idGroup;
+    }
+
+    public Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
     @Override
     public String toString() {
         return eventName;
@@ -106,10 +122,11 @@ public class Event {
         this.eventName = event.eventName;
         this.group = event.group;
         this.date = event.date;
-        this.type = event.type;
         this.description = event.description;
+        this.type = event.type;
         this.login = event.login;
         this.taskId = event.taskId;
+        this.idGroup = event.idGroup;
+        this.idUser = event.idUser;
     }
 }
-

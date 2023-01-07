@@ -28,7 +28,7 @@ public class TaskService {
                     System.out.println("RESULT " + resultArg);
                     try {
 
-                        if(resultArg.next()){
+                        while (resultArg.next()){
                             Integer idTask= resultArg.getInt(1);
                             String name = resultArg.getString(2);
                             String description= resultArg.getString(3);
@@ -37,7 +37,6 @@ public class TaskService {
                             String login = resultArg.getString(6);
                             String groupName = resultArg.getString(7);
                             Integer idUser = resultArg.getInt(8);
-
                             groupData.add(new Event(name, groupName, date2, description, "", login, idTask,idGroup.getGroupId(),idUser));
 
                         }
@@ -64,9 +63,9 @@ public class TaskService {
     public Optional<Response> addTaskToGroup(AddTaskToGroupData registerData) {
         List<Object> dataAddTaskToGroup=new ArrayList<Object>(){
             {
+                add(registerData.getIdTask());
                 add(registerData.getIdUser());
                 add(registerData.getIdGroup());
-                add(registerData.getIdTask());
             }
         };
 
@@ -177,7 +176,7 @@ public class TaskService {
                     List<TaskData> groupData=new ArrayList<>();
                     try {
 
-                        if(resultArg.next()){
+                        while (resultArg.next()){
                             Integer idTask= resultArg.getInt(1);
                             String name= resultArg.getString(2);
                             String description= resultArg.getString(3);
