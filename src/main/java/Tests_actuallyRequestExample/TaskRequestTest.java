@@ -6,9 +6,11 @@ import JSONUtility.ReadObjectFromJson;
 import JSONUtility.SaveDataAsJson;
 import Utility.Requests;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sun.mail.imap.protocol.ID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,9 @@ public class TaskRequestTest {
         TaskData taskData=new TaskData(2,"Zrobić","Coś zrobić",date,date);
         Request request=new Request(RequestType.ADD_NEW_TASK.getNameRequest(), SaveDataAsJson.save(taskData));
         Optional<Response> response= Requests.make2(request);
-        Assert.assertEquals(CodeResponse.OK.getResponseForCode(),response.get());
+        IdTask mockTask=new IdTask(4);
+        IdTask idNewTask=ReadObjectFromJson.read(response.get().getData(),IdTask.class);
+        Assert.assertEquals(idNewTask,mockTask);
     }
 
     @Test void addTaskToUser() throws JsonProcessingException {
@@ -82,19 +86,20 @@ public class TaskRequestTest {
 
     @Test void getAllTaskForGroup() throws JsonProcessingException {
         GroupId idUser=new GroupId(1);
-        java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+        LocalDateTime date = new java.sql.Timestamp(new java.util.Date().getTime()).toLocalDateTime();
 
         Request request=new Request(RequestType.GET_ALL_TASK_FOR_GROUP.getNameRequest(), SaveDataAsJson.save(idUser));
         Optional<Response> response= Requests.make2(request);
-        List<TaskData> listTask=new ArrayList<>();
-        TaskData taskDataMock=new TaskData(1,"Zrobić","Coś zrobić",date,date);
+
+        List<Event> listTask=new ArrayList<>();
+        Event taskDataMock= new Event("Zrobić bałagan", "testowaGrupa", date, "Coś zrobić","",  "konrad99", 1,3,1);
 
         listTask.add(taskDataMock);
 
 
-        List<TaskData> result= ReadObjectFromJson.<TaskData>readListObject(response.get().getData(),TaskData.class);
+        List<Event> result= ReadObjectFromJson.<Event>readListObject(response.get().getData(),Event.class);
 
-        for(TaskData x:result){
+        for(Event x:result){
             System.out.println(x);
         }
 

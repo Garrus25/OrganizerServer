@@ -53,6 +53,7 @@ public class TaskRequestHandler extends RequestService{
 
     public void add_updateTask() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.UPDATE_TASK.getNameRequest(), request,(requestParam)->{
+
             TaskData taskDataRequestParam = ReadObjectFromJson.read(requestParam.getData(), TaskData.class);
             Optional<Response> response = taskService.updateTask(taskDataRequestParam);
             return response;

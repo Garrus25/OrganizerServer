@@ -12,6 +12,7 @@ public class ReadObjectFromJson {
     public static <T>  T read(String data,Class dataOut) throws JsonProcessingException {
 
             ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
             T me = (T) mapper.readValue(data, dataOut);
             return me;
 
@@ -20,6 +21,7 @@ public class ReadObjectFromJson {
     public static <T> List<T> readListObject(String data,Class<T> Tclass) throws JsonProcessingException{
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules();
         CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Tclass);
         List<T> ts = mapper.readValue(data, listType);
         return ts;

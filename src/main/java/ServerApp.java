@@ -5,12 +5,19 @@ import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class ServerApp {
 
@@ -22,9 +29,71 @@ class ServerApp {
     private static final int BUFFER_CAPACITY_IN_BYTES = 4200;
     private static final Integer PORT_NUMBER = 2137;
 
+    private static final Integer THREADS_QUANTITY=16;
+
+    private final ExecutorService exec = Executors.newFixedThreadPool(THREADS_QUANTITY);
+    public void start() throws IOException {
+
+        try{
+            ServerSocket server = new ServerSocket(PORT_NUMBER);
+            while (true) {
+                Socket socket = server.accept();
+                exec.execute(() -> handleRequest(socket));
+            }
+        }catch (Exception x){
+            x.printStackTrace();
+        }
+
+    }
+
+    private void handleRequest(Socket socket) {
+
+        try (PrintWriter out = new PrintWriter(
+                socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            String line;
+            line = in.readLine();
+
+            RequestParser parser = new RequestParser();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+
+            Request me = mapper.readValue((line.trim()), Request.class);
 
 
-    public void start() throws IOException, SQLException {
+            Optional<Response> response = parser.requestParser(me);
+
+            if (response.isPresent()) {
+
+                String  message = SaveDataAsJson.save(response.get());
+                out.println(message);
+            }
+
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void start2() throws IOException, SQLException {
         selector = Selector.open();
 
         ssc = ServerSocketChannel.open();
