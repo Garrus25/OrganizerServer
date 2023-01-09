@@ -7,6 +7,8 @@ import JSONUtility.CodeResponse;
 import JSONUtility.SaveDataAsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +68,50 @@ public class GroupService {
         }};
         QueryManager.executeQuery(SQLQuery.REMOVE_USER_FROM_GROUP,dataRemoveUserFromGroup,typeRemoveUserFromGroup);
         return Optional.of(CodeResponse.OK.getResponseForCode());
+    }
+
+
+
+    public Optional<Response> getGroupsUser(UserID userID){
+
+        List<Object> getGroupUSerData=new ArrayList<Object>(){
+            {
+                add(userID.getUserID());
+            }
+        };
+
+        List<Class> getGroupUserType=new ArrayList<Class>(){{
+            add(String.class);
+        }};
+        Optional<Response> result= QueryManager.getFromSQL(SQLQuery.GET_GROUPS_USER, getGroupUSerData,getGroupUserType
+                ,(resultReq)->{
+                    List<GroupData> groupData=new ArrayList<>();
+                    try {
+
+                        if(resultReq.next()){
+                            int idGroup= resultReq.getInt(1);
+                            String nameGroup= resultReq.getString(2);
+                            String codeGroup= resultReq.getString(3);
+                            groupData.add(new GroupData(idGroup,nameGroup,codeGroup));
+
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                    String json= null;
+                    try {
+                        json = SaveDataAsJson.save(groupData);
+                        return Optional.of(new Response(json,RequestType.GET_ALL_GROUP_DATA.getNameRequest()));
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                });
+
+        return  result;
     }
 
     public Optional<Response> getMembershipGroup(GroupId idGroup){

@@ -18,6 +18,14 @@ public class GroupRequestHandler extends RequestService {
     }
 
 
+    public void add_getGroupUser(){
+        addRequestHandler((Request request)-> analiseRequest(RequestType.GET_GROUP_USER.getNameRequest(), request,(requestParam)->{
+            UserID userID = ReadObjectFromJson.read(requestParam.getData(), UserID.class);
+            Optional<Response>  response = groupService.getGroupsUser(userID);
+            return response;
+        }));
+    }
+
     public void add_getMembershipGroupAboutId() {
         addRequestHandler((Request request)-> analiseRequest(RequestType.GET_MEMBERSHIP_GROUP_ABOUT_UD.getNameRequest(), request,(requestParam)->{
             GroupId groupIdParamRequest = ReadObjectFromJson.read(requestParam.getData(), GroupId.class);
@@ -67,6 +75,7 @@ public class GroupRequestHandler extends RequestService {
         add_createGroup();
         add_addUserToGroup();
         add_removeUserFromGroup();
+        add_getGroupUser();
     }
 }
 

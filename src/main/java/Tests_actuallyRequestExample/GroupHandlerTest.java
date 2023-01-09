@@ -15,6 +15,20 @@ import java.util.Optional;
 
 public class GroupHandlerTest {
 
+
+    @Test void getUserGroups() throws JsonProcessingException {
+        UserID idUser=new UserID("1");
+
+        Request request=new Request(RequestType.GET_ALL_GROUP_DATA.getNameRequest(), SaveDataAsJson.save(idUser));
+        Optional<Response> response= Requests.make2(request);
+        List<GroupData> result= ReadObjectFromJson.<GroupData>readListObject(response.get().getData(),GroupData.class);
+        GroupData x=new GroupData(1,"testowaGrupa","TST1");
+        List<GroupData> list=new ArrayList<>();
+        list.add(x);
+
+        Assert.assertEquals(list,result);
+    }
+
     @Test void createGroup() throws JsonProcessingException {
 
         GroupCreationData groupData=new GroupCreationData("testowaGrupa","TST1");

@@ -33,7 +33,9 @@ public enum RequestType {
 
     ADD_USER_TO_GROUP("adduserToGroup"),
 
-    REMOVE_USER_FROM_GROUP("removeUserFromGroup");
+    REMOVE_USER_FROM_GROUP("removeUserFromGroup"),
+
+    GET_GROUP_USER("getGroupUser");
 
 
 
