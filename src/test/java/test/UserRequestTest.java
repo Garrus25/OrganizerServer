@@ -1,4 +1,4 @@
-package Tests_actuallyRequestExample;
+package test;
 
 import Data_mapperJsonClass.*;
 import JSONUtility.ReadObjectFromJson;

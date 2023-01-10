@@ -4,7 +4,6 @@ public class LoginAndPassword {
     private  String login;
     private String password;
 
-
     public LoginAndPassword(){
 
     }

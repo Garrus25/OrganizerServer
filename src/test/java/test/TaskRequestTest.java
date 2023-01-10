@@ -1,4 +1,4 @@
-package Tests_actuallyRequestExample;
+package test;
 
 import Data_mapperJsonClass.*;
 import JSONUtility.CodeResponse;
@@ -6,7 +6,6 @@ import JSONUtility.ReadObjectFromJson;
 import JSONUtility.SaveDataAsJson;
 import Utility.Requests;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.mail.imap.protocol.ID;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
