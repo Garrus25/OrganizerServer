@@ -116,10 +116,11 @@ public class GroupService {
                     List<GroupData> groupData=new ArrayList<>();
                     try {
 
-                        if(resultReq.next()){
+                        while(resultReq.next()){
                             int idGroup= resultReq.getInt(1);
                             String nameGroup= resultReq.getString(2);
                             String codeGroup= resultReq.getString(3);
+                            System.out.println(new GroupData(idGroup,nameGroup,codeGroup));
                             groupData.add(new GroupData(idGroup,nameGroup,codeGroup));
 
                         }
