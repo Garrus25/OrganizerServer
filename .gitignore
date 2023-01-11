@@ -4,3 +4,4 @@ target
 out
 src/main/resources/local.properties
 src/main/resources/simplejavamail.properties
+/OrganizerServer.iml
