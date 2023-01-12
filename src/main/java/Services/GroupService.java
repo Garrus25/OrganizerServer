@@ -79,7 +79,6 @@ public class GroupService {
                 add(userID.getUserID());
             }
         };
-
         List<Class> getGroupUserType=new ArrayList<Class>(){{
             add(String.class);
         }};
@@ -88,7 +87,7 @@ public class GroupService {
                     List<GroupData> groupData=new ArrayList<>();
                     try {
 
-                        if(resultReq.next()){
+                        while(resultReq.next()){
                             int idGroup= resultReq.getInt(1);
                             String nameGroup= resultReq.getString(2);
                             String codeGroup= resultReq.getString(3);
@@ -162,7 +161,7 @@ public class GroupService {
                     List<GroupData> groupData=new ArrayList<>();
                     try {
 
-                        if(resultReq.next()){
+                        while (resultReq.next()){
                             int idGroup= resultReq.getInt(1);
                             String nameGroup= resultReq.getString(2);
                             String codeGroup= resultReq.getString(3);
