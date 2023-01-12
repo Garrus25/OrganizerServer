@@ -16,8 +16,8 @@ public final class MailerServices {
         createMailer();
     }
 
-    public static void sendMail(String emailTo) {
-        Email mail= MessageMailTextService.createMail(emailTo);
+    public static void sendMail(String emailTo,String token) {
+        Email mail= MessageMailTextService.createMail(emailTo,token);
         mailer.sendMail(mail);
         mailer.getOperationalConfig()
                 .getExecutorService().shutdownNow();
